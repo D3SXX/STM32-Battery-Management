@@ -16,4 +16,4 @@
 - KiCAD Design
 - Getting a quote from JLCPCB/PCBWAY etc.
 - Powercells
-- > Would be nice to test if real cells work, dummy cells will get tested before obv
+- - > Would be nice to test if real cells work, dummy cells will get tested before obv
