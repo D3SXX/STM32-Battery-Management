@@ -6,9 +6,9 @@
 - Voltage / Battery
 - PSU
 - IoTTicket
-- Modbus
 - Figure out the MOSFETs
   - > _Should_ be easy to implement since we have done something very similar in the past
+- Modbus
 
     
 ## To keep in mind for the future : 
