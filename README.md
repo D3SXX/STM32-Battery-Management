@@ -1,5 +1,18 @@
-# STM32-Battery-Management Software
+# STM32-Battery-Management 
 
-## List of software :
+## TODO :
 
-- [Quartus II 13.0sp1 Web Edition](/Software/Quartus-web-13.0.1.232-windows.tar)
+- Temperature Reading
+- Voltage / Battery
+- PSU
+- IoTTicket
+- Modbus
+ > _Should_ be easy to implement since we have done something very similar in the past
+- Figure out the MOSFETs
+    
+## To keep in mind for the future : 
+
+- KiCAD Design
+- Getting a quote from JLCPCB/PCBWAY etc.
+- Powercells
+ > Would be nice to test if real cells work, dummy cells will get tested before obv
