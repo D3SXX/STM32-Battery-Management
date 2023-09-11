@@ -20,15 +20,21 @@ Please use this page as a reference for what tools, etc. we are using. If the fi
  
 # Coding Conventions 
 
-- See [dosc/cpp-naming-convention.MD](https://github.com/D3SXX/STM32-Battery-Management/blob/develop/docs/cpp-naming-convention.MD)
+- See [docs/cpp-naming-convention.MD](/docs/cpp-naming-convention.MD)
  
 # Brances
 
-- See [docs/branch-naming.convention.MD](https://github.com/D3SXX/STM32-Battery-Management/blob/develop/docs/branch-naming-convention.MD)
+- See [docs/branch-naming.convention.MD](/docs/branch-naming-convention.MD)
 
 # Logs 
 
-- See [logs](https://github.com/D3SXX/STM32-Battery-Management/blob/develop/logs/)
+- See [logs](/logs/)
+
+# Documentation index
+
+- [Temperature Sensor Analysis](/docs/temperature-sensors.MD)
+- [Git Action for CI](/docs/git-action-for-ci.MD)
+- [Atolic TrueStudio Pipeline](/docs/atollic-true-studio-pipeline.MD)
 
 # Initial requirements (from moodle) 
 
@@ -43,5 +49,3 @@ Please use this page as a reference for what tools, etc. we are using. If the fi
 - [Communication of cell voltages over Modbus RTU](https://github.com/D3SXX/STM32-Battery-Management/issues/11) 
 
 - [Some kind of visualization of the Modbus data](https://github.com/D3SXX/STM32-Battery-Management/issues/12)
-
- 
