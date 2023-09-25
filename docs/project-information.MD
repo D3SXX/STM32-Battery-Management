@@ -14,9 +14,9 @@ Please use this page as a reference for what tools, etc. we are using. If the fi
 
 # Code 
 
-- Language - C 
+- Language - C
 
-- Software - PlatformIO (with clang compiler on windows). 
+- Software - PlatformIO (STM32CUBE framework). 
  
 # Coding Conventions 
 
@@ -35,6 +35,7 @@ Please use this page as a reference for what tools, etc. we are using. If the fi
 - [Temperature Sensor Analysis](/docs/temperature-sensors.MD)
 - [Git Action for CI](/docs/git-action-for-ci.MD)
 - [Atolic TrueStudio Pipeline](/docs/atollic-true-studio-pipeline.MD)
+- [CD4051BE Multiplexer Overview](/docs/CD4051BE-overview.md)
 
 # Initial requirements (from moodle) 
 
