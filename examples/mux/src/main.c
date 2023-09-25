@@ -1,21 +1,14 @@
-/*Author : Vladislav R., Date : 24.09.2023 
-Description: This is modified lm35-LL code with added comments and some adjustments
+/*Authors : Sergiu P. & Vladislav R., Date : 25.09.2023 
+Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
 
 This code here showcases: 
 Reading ADC values for Analog input A0 and A1 with LL
 Using USART with LL 
-Using GPIO with LL
+Using GPIO with LL (output using pins D3,D4,D5)
+Manipulation of CD4051BE multiplexer
 
-Core differences:
-LL_mDelay now works
-Both A1 and A0 now work
-Structure of code was changed for better readability
-Added missing comments
-Minor code tweaks
+// Note: For now works with only 1 multiplexer
 
-*/
-/*#define Pin12 MUX1 
-#define Pin13 MUX2*/
 /* Includes */
 #include <stddef.h>
 #include "stm32l1xx.h"
@@ -49,7 +42,7 @@ void USART2_write(char data);
 int find_median(int[], int);
 char USART2_read(void);
 int read_adc_A0(void);
-int muxRead(int chan);
+int mux_read(int chan,uint32_t A,uint32_t B,uint32_t C);
 /**
 **===========================================================================
 **
@@ -85,55 +78,45 @@ int main(void)
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA); // Enable clock for GPIOA (to configure its pins)
 	LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT); // Set up pin 5 for output
 
-	int read_times = 5; // Specify the amount of reads
 	char buf[100];
-	int adc_values_A0[read_times];
 
-/*Pin Setup for A B C Mux Controls*/
+	/*Pin Setup for A B C Mux Controls*/
 
+	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB); // Enable clock for GPIOB (to configure its pins)
 
-LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
-LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_3,LL_GPIO_OUTPUT_PUSHPULL);
-LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_3, LL_GPIO_MODE_OUTPUT); //Pin A
-LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_3,LL_GPIO_PULL_NO);
-LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_3, LL_GPIO_SPEED_FREQ_LOW);
-LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_4, LL_GPIO_MODE_OUTPUT); //C
-LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT);  // B
-LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_4,LL_GPIO_PULL_NO);
-LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_5,LL_GPIO_PULL_NO);
-LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_4,LL_GPIO_OUTPUT_PUSHPULL);
-LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_5,LL_GPIO_OUTPUT_PUSHPULL);
-LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_4, LL_GPIO_SPEED_FREQ_LOW);
-LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_5, LL_GPIO_SPEED_FREQ_LOW);
+	// Pin A
+	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_3,LL_GPIO_OUTPUT_PUSHPULL); // Configure pin as a push-pull output
+	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_3, LL_GPIO_MODE_OUTPUT); // Configure Pin to be output
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_3,LL_GPIO_PULL_NO); // Disable pull-up and pull-down resistors
+	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_3, LL_GPIO_SPEED_FREQ_HIGH); // Set pin speed to HIGH
+	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_4,LL_GPIO_OUTPUT_PUSHPULL); // Pin C
+	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_4, LL_GPIO_MODE_OUTPUT); 
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_4,LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_4, LL_GPIO_SPEED_FREQ_HIGH);
+	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_5,LL_GPIO_OUTPUT_PUSHPULL); // Pin B
+	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT);
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_5,LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_5, LL_GPIO_SPEED_FREQ_HIGH);
 
-
-  /* Infinite loop */
-  int channel=0;
+	/* Infinite loop */
+	int channel=0;
   
 	while (1)
 	{
-        if(channel > 7) channel = 0;
-		/*Read channels read_times times*/
-		/*for(int k=0;k<read_times-1;k++)
-		{
-			adc_values_A0[k] = muxRead(1); // Read A0 and record its output to an array
-			LL_mDelay(50); // 50 ms delay for each reading
-		}
+        int adc_A0 = mux_read(channel,LL_GPIO_PIN_3,LL_GPIO_PIN_5,LL_GPIO_PIN_4);
 
-		int adc_A0 = find_median(adc_values_A0,read_times);*/
-        int adc_A0 = muxRead(channel);
 		/*Turn on internal LED if Voltage > 1.5V*/
 		if(adc_A0>1861 || adc_A0>1861) //1861/4095 x 3.3V = 1.5V (Changed for LM35)
-		 	 GPIOA->ODR|=0x20; //0010 0000 set bit 5. p186
+			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
 	  	else
-		 	 GPIOA->ODR&=~0x20; //0000 0000 clear bit 5. p186
+			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
 
 		/*Prepare data for USART2 Output (A0)*/
 		float voltage_A0 = adc_A0 * (3.3/4095); // Calculate voltage
 		voltage_A0 = voltage_A0 * 1000;
 		int volt_integer=(int)voltage_A0;
 
-		sprintf(buf,"CH%d_ADC= %d CH%d_Volt= %d mV ",channel,adc_A0,channel,volt_integer);
+		sprintf(buf,"CH%d_ADC=%d CH%d_Volt=%dmV ",channel,adc_A0,channel,volt_integer);
 
 		/*Get size of the buf*/
 	  	int len=0;
@@ -152,11 +135,14 @@ LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_5, LL_GPIO_SPEED_FREQ_LOW);
 		USART2_write('\n');
 		USART2_write('\r');
 
+		if(channel == 7)
+			channel = 0;	
+		else
+			channel++;
 
-		LL_mDelay(2000); // Wait 3 seconds
-		
-  channel++;
-  }
+		LL_mDelay(1000); // Wait 1 seconds
+  	
+  	}
   return 0;
 }
 
@@ -267,83 +253,82 @@ A B C Ch
 1 1 0 6
 1 1 1 7 
 
-*/
-/*
 Mux : 
 
 Pin 1, P1
 Pin 2, p2
 pin 3, p3 
 
-
-case 1 p1=0 p2 =0 p3 =0
+case 0 p1=0 p2 =0 p3 =0
 write value to pins
-read value from Ch1 
+read value from Ch0
 
 ....
 
-case 8  : p1 =1 p2 = 1 p3 = 1 
+case 7  : p1 =1 p2 = 1 p3 = 1 
 write value
-read value from Ch8
+read value from Ch7
 
 */
 
 
 
-int muxRead (int chan){
-int muxValue;
-switch (chan)
+int mux_read (int chan, uint32_t A,uint32_t B,uint32_t C){
+int read_times = 5;  // Specify the amount of reads
+int adc_values[read_times];
+switch (chan) // C B A
 {
-
-case 1:
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);  // Disable C
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_5);  // Disable B
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_3); //Enable A
+case 0: // 0 0 0
+    LL_GPIO_ResetOutputPin(GPIOB, A); // Disable A
+	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable A
+    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable A
     break;
-case 2 : 
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);  // Disable C
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);  // Disable A
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5); //Enable B 
+case 1: // 0 0 1
+	LL_GPIO_SetOutputPin(GPIOB, A); // Enable A
+    LL_GPIO_ResetOutputPin(GPIOB, B); // Disable B
+    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable C
     break;
-case 3 : 
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);  // Disable C
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_3);  // Enable A
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5); //Enable B 
+case 2 : // 0 1 0
+    LL_GPIO_ResetOutputPin(GPIOB, A);  // Disable A
+    LL_GPIO_SetOutputPin(GPIOB, B); // Enable B 
+    LL_GPIO_ResetOutputPin(GPIOB, C);  // Disable C
     break;
-
-case 4 : 
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);  // Disable C
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);  // Disable A
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5); //Enable B
+case 3 : // 0 1 1
+	LL_GPIO_SetOutputPin(GPIOB, A);  // Enable A
+	LL_GPIO_SetOutputPin(GPIOB, B); // Enable B 
+    LL_GPIO_ResetOutputPin(GPIOB, C);  // Disable C
     break;
-case 5 : 
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_5);  // Disable B
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4); //Enable C 
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_3); //Enable A 
+case 4 : // 1 0 0
+    LL_GPIO_ResetOutputPin(GPIOB, A);  // Disable A
+    LL_GPIO_ResetOutputPin(GPIOB, B);  // Disable B
+	LL_GPIO_SetOutputPin(GPIOB, C); // Enable C
     break;
-case 6 : 
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);  // Disable A
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5); //Enable B
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4); //Enable C 
-
+case 5 : // 1 0 1
+    LL_GPIO_SetOutputPin(GPIOB, A); //Enable A 
+    LL_GPIO_ResetOutputPin(GPIOB, B);  // Disable B
+    LL_GPIO_SetOutputPin(GPIOB, C); // Enable C 
     break;
-
-case 7 : 
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_3); //Enable A 
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5); //Enable C
-    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4); //Enable B 
-
+case 6 : // 1 1 0
+    LL_GPIO_ResetOutputPin(GPIOB, A);  // Disable A
+    LL_GPIO_SetOutputPin(GPIOB, B); // Enable B
+    LL_GPIO_SetOutputPin(GPIOB, C); // Enable C 
     break;
-
-default:
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);  // Disable A
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_4);  // Disable A
-    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_5);  // Disable A
-
-
+case 7 : // 1 1 1
+    LL_GPIO_SetOutputPin(GPIOB, A); // Enable A 
+    LL_GPIO_SetOutputPin(GPIOB, B); // Enable C
+    LL_GPIO_SetOutputPin(GPIOB, C); // Enable B 
+    break;
+default: // 0 0 0
+    LL_GPIO_ResetOutputPin(GPIOB, A); // Disable A
+	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable A
+    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable A
     break;
 }
-
-    muxValue = read_adc_A0();
-    return muxValue;
+	/*Read channels read_times times*/
+	for(int k=0;k<read_times-1;k++)
+	{
+			adc_values[k] = read_adc_A0(); // Read A0 and record its output to an array
+			LL_mDelay(50); // 50 ms delay for each reading
+	}
+    return find_median(adc_values,read_times);
 }
