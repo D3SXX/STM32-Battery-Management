@@ -1,4 +1,4 @@
-/*Authors : Sergiu P. & Vladislav R., Date : 25.09.2023 
+/*Authors : Sergiu P. & Vladislav R., Date : 29.09.2023 
 Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
 
 This code here showcases: 
@@ -6,6 +6,12 @@ Reading ADC values for Analog input A0 and A1 with LL
 Using USART with LL 
 Using GPIO with LL (output using pins D3,D4,D5)
 Manipulation of CD4051BE multiplexer
+
+// Changes
+
+// Make a delay after mux channel switch
+// Add temp
+// Improve comments
 
 // Note: For now works with only 1 multiplexer
 
@@ -103,6 +109,7 @@ int main(void)
   
 	while (1)
 	{
+
         int adc_A0 = mux_read(channel,LL_GPIO_PIN_3,LL_GPIO_PIN_5,LL_GPIO_PIN_4);
 
 		/*Turn on internal LED if Voltage > 1.5V*/
@@ -116,7 +123,7 @@ int main(void)
 		voltage_A0 = voltage_A0 * 1000;
 		int volt_integer=(int)voltage_A0;
 
-		sprintf(buf,"CH%d_ADC=%d CH%d_Volt=%dmV ",channel,adc_A0,channel,volt_integer);
+		sprintf(buf,"CH%d_ADC=%d CH%d_Volt=%dmV CH%d_Temp=%dC",channel,adc_A0,channel,volt_integer,channel,(int)volt_integer/10);
 
 		/*Get size of the buf*/
 	  	int len=0;
@@ -140,7 +147,7 @@ int main(void)
 		else
 			channel++;
 
-		LL_mDelay(1000); // Wait 1 seconds
+		LL_mDelay(1000); // Wait 1 second
   	
   	}
   return 0;
@@ -243,7 +250,7 @@ int find_median(int arr[],int len){
 /*
 Mux table : 
 
-A B C Ch
+C B A Ch
 0 0 0 0
 0 0 1 1
 0 1 0 2
@@ -273,15 +280,16 @@ read value from Ch7
 
 
 
-int mux_read (int chan, uint32_t A,uint32_t B,uint32_t C){
+int mux_read (int chan, uint32_t C,uint32_t B,uint32_t A){ // Possibly need to change A and C  
+// Modify a value thru pointer, return Bool (to do)
 int read_times = 5;  // Specify the amount of reads
 int adc_values[read_times];
 switch (chan) // C B A
 {
 case 0: // 0 0 0
     LL_GPIO_ResetOutputPin(GPIOB, A); // Disable A
-	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable A
-    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable A
+	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable B
+    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable C
     break;
 case 1: // 0 0 1
 	LL_GPIO_SetOutputPin(GPIOB, A); // Enable A
@@ -304,7 +312,7 @@ case 4 : // 1 0 0
 	LL_GPIO_SetOutputPin(GPIOB, C); // Enable C
     break;
 case 5 : // 1 0 1
-    LL_GPIO_SetOutputPin(GPIOB, A); //Enable A 
+    LL_GPIO_SetOutputPin(GPIOB, A); // Enable A 
     LL_GPIO_ResetOutputPin(GPIOB, B);  // Disable B
     LL_GPIO_SetOutputPin(GPIOB, C); // Enable C 
     break;
@@ -315,15 +323,16 @@ case 6 : // 1 1 0
     break;
 case 7 : // 1 1 1
     LL_GPIO_SetOutputPin(GPIOB, A); // Enable A 
-    LL_GPIO_SetOutputPin(GPIOB, B); // Enable C
-    LL_GPIO_SetOutputPin(GPIOB, C); // Enable B 
+    LL_GPIO_SetOutputPin(GPIOB, B); // Enable B
+    LL_GPIO_SetOutputPin(GPIOB, C); // Enable C 
     break;
 default: // 0 0 0
     LL_GPIO_ResetOutputPin(GPIOB, A); // Disable A
-	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable A
-    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable A
+	LL_GPIO_ResetOutputPin(GPIOB, B); // Disable B
+    LL_GPIO_ResetOutputPin(GPIOB, C); // Disable C
     break;
 }
+	LL_mDelay(5); // We have to wait for a switch (about 1 ms measured with oscilloscope), otherwise we get garbage values
 	/*Read channels read_times times*/
 	for(int k=0;k<read_times-1;k++)
 	{
