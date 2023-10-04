@@ -1,0 +1,122 @@
+Circuit: * C:\Users\siyxu\Documents\vamk\EmbeddedSystemProject\Schematics\MultiCellBatteryMeter\MultiCellBatteryMeter.asc
+
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+Gmin = 1.07374
+Gmin = 0.115292
+Gmin = 0.0123794
+Gmin = 0.00132923
+Gmin = 0.000142725
+Gmin = 1.5325e-05
+Gmin = 1.6455e-06
+vernier = 0.5
+vernier = 0.25
+vernier = 0.125
+vernier = 0.0625
+Gmin = 1.52276e-06
+vernier = 0.0833333
+vernier = 0.111111
+Gmin = 1.20589e-06
+vernier = 0.148148
+vernier = 0.197531
+Gmin = 8.3344e-07
+vernier = 0.263374
+Gmin = 4.6879e-07
+vernier = 0.351165
+vernier = 0.46822
+Gmin = 1.81721e-07
+vernier = 0.624294
+vernier = 0.832392
+Gmin = 4.17965e-08
+vernier = 1
+Gmin = 5.14365e-09
+Gmin = 5.52295e-10
+Gmin = 5.93023e-11
+Gmin = 6.36753e-12
+Gmin = 6.83709e-13
+Gmin = 0
+Gmin stepping succeeded in finding the operating point.
+
+Semiconductor Device Operating Points:
+                        --- Diodes ---
+Name:    d:u1:1      d:u1:4      d:u1:5      d:u1:6      d:u1:2
+Model:    u1:xu       u1:xd       u1:yu       u1:yd     u1:dbias
+Id:     -8.70e-11   -3.31e-11    5.33e-15   -5.33e-15   -1.20e-08
+Vd:     -8.69e+00   -3.31e+00    5.33e-03   -5.33e-03   -1.02e+01
+Req:     1.00e-11    1.00e-11    1.00e-12    1.00e-12    1.00e-03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    d:u1:3      d:u2:1      d:u2:4      d:u2:5      d:u2:6
+Model:  u1:dbias      u2:xu       u2:xd       u2:yu       u2:yd
+Id:     -1.20e-08   -9.53e-11   -2.47e-11   -8.49e-16    8.49e-16
+Vd:     -1.02e+01   -9.53e+00   -2.47e+00   -8.48e-04    8.48e-04
+Req:     1.00e-03    1.00e-11    1.00e-11    1.00e-12    1.00e-12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    d:u2:2      d:u2:3      d:u3:1      d:u3:4      d:u3:5
+Model:  u2:dbias    u2:dbias      u3:xu       u3:xd       u3:yu
+Id:     -1.20e-08   -1.20e-08   -9.53e-11   -2.47e-11   -5.70e-15
+Vd:     -9.29e+00   -9.29e+00   -9.53e+00   -2.47e+00   -5.69e-03
+Req:     1.00e-03    1.00e-03    1.00e-11    1.00e-11    1.00e-12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    d:u3:6      d:u3:2      d:u3:3      d:u4:1      d:u4:4
+Model:    u3:yd     u3:dbias    u3:dbias      u4:xu       u4:xd
+Id:      5.70e-15   -1.20e-08   -1.20e-08   -9.54e-11   -2.46e-11
+Vd:      5.69e-03   -7.93e+00   -7.93e+00   -9.54e+00   -2.46e+00
+Req:     1.00e-12    1.00e-03    1.00e-03    1.00e-11    1.00e-11
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    d:u4:5      d:u4:6      d:u4:2      d:u4:3
+Model:    u4:yu       u4:yd     u4:dbias    u4:dbias
+Id:     -1.05e-14    1.05e-14   -1.20e-08   -1.20e-08
+Vd:     -1.05e-02    1.05e-02   -6.57e+00   -6.57e+00
+Req:     1.00e-12    1.00e-12    1.00e-03    1.00e-03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+                        --- VDMOSFET Transistors ---
+Name:        m:u1:1      m:u1:2      m:u2:1      m:u2:2      m:u3:1
+Model:        u1:n        u1:p        u2:n        u2:p        u3:n
+Id:          3.88e-04   -3.14e-04    3.44e-04   -3.56e-04    3.11e-04
+Vgs:         5.33e-03    5.33e-03   -8.48e-04   -8.48e-04   -5.69e-03
+Vds:         8.70e+00   -3.30e+00    9.52e+00   -2.48e+00    9.52e+00
+Vth:        -1.00e-01    1.00e-01   -1.00e-01    1.00e-01   -1.00e-01
+Gm:          7.37e-03    6.63e-03    6.94e-03    7.06e-03    6.60e-03
+Gds:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgs:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbody:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:        m:u3:2      m:u4:1      m:u4:2
+Model:        u3:p        u4:n        u4:p
+Id:         -3.91e-04    2.80e-04   -4.28e-04
+Vgs:        -5.69e-03   -1.05e-02   -1.05e-02
+Vds:        -2.48e+00    9.52e+00   -2.48e+00
+Vth:         1.00e-01   -1.00e-01    1.00e-01
+Gm:          7.40e-03    6.26e-03    7.74e-03
+Gds:         0.00e+00    0.00e+00    0.00e+00
+Cgs:         0.00e+00    0.00e+00    0.00e+00
+Cgd:         0.00e+00    0.00e+00    0.00e+00
+Cbody:       0.00e+00    0.00e+00    0.00e+00
+
+
+
+Date: Wed Oct  4 15:06:30 2023
+Total elapsed time: 11.801 seconds.
+
+tnom = 27
+temp = 27
+method = trap
+totiter = 893
+traniter = 0
+tranpoints = 0
+accept = 0
+rejected = 0
+matrix size = 43
+fillins = 27
+solver = Normal
+Avg thread counts: 5.5/0.0/12.0/5.5
+Matrix Compiler1: 2.63 KB object code size
+Matrix Compiler2: 4.12 KB object code size  0.5/0.8/[0.4]
+
