@@ -20,7 +20,7 @@ void delay_ms(const unsigned long delay) {
 }
 
 void init_delay_ms(void){
-    SysTick->LOAD   = 32000 - 1;  // 32 000 000 = 1s so 32000 = ms, 32 = 1 us
+    SysTick->LOAD   = 32000 - 1;  // 32 000 000 - 1 = 1s so 32000 - 1 = ms, 32 - 1= 1 us
     SysTick->VAL    = 0;
     // enable counter, use processor clock, M3 Generic User Guide p. 159
     SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |     //Set SysTick->CTRL = 0b111;

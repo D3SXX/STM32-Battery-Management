@@ -2,38 +2,40 @@
 #include "ll_include.h"
 #include "modbus_rtu.h"
 #include "modbus_rtu_func_4.h"
+#include "stdbool.h"
 #include "sysclock_config.h"
 #include "usart_config.h"
 #include "utils.h"
 
 #define DEBUG_CONSOLE_EN 1
 
-#ifdef DEBUG_CONSOLE_EN > 0
+#ifdef DEBUG_CONSOLE_EN> 0
 #include "stdio.h"
 #endif
 
 /* Private define  */
-int32_t u1tcFlag = 0;  // USART1 Transmite complete flag
-#define TRUE  (int32_t)1
-#define FALSE (int32_t)0
+bool u1tcFlag = false;  // USART1 Transmite complete flag
+bool u1tsFlag = false;  // USART1 Transmite started flag
 
 /* Private macro */
 #define ARRAY_LEN(x) (sizeof(x) / sizeof((x)[0]))
 
 /* Private variables */
-uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
-char    usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
+_Atomic uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
+_Atomic uint8_t usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
 
+/* Private define  */
 static inline void LED2_init(void) {
     RCC->AHBENR |= 1;       // GPIOA ABH bus clock ON. p154
     GPIOA->MODER |= 0x400;  // GPIOA pin 5 to output. p184
 }
 
-void Configure_DebugPin(void) {
+void Configure_DebugPin(uint32_t debug_pin) {
     LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_10, LL_GPIO_MODE_OUTPUT);
+    LL_GPIO_SetPinMode(GPIOA, debug_pin, LL_GPIO_MODE_OUTPUT);
 }
 
+/* Main routine */
 int main(void) {
     __disable_irq();
     SystemClock_Config();
@@ -43,7 +45,7 @@ int main(void) {
     IWDG_init();
     LED2_init();
     debug_console("App started...\n\r");
-    // Configure_DebugPin();
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_OUTPUT);  // config a debug pin on GPIO
     __enable_irq();
     while (1) {
         IWDG_feed();
@@ -55,8 +57,8 @@ int main(void) {
 
 /* Interrupt handlers here */
 void SysTick_Handler(void) {
-    // Debug PIN PA10
-    // LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_10);
+    // Debug PIN PA10/pwm/D3
+    LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_8);
 }
 
 /**
@@ -77,13 +79,14 @@ void DMA1_Channel5_IRQHandler(void) {
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("USART1 DMA transfer-complete interrupt!\r\n");
 #endif
-        u1tcFlag = TRUE;
+        u1tcFlag = true;
         DMA1->IFCR |= DMA_IFCR_CTCIF5; /*!< Channel 5 Transfer Complete clear */
         if (MODBUS_RTU_ERR_SUCCESS !=
             modbusRtu_AddressValidation(usart1_rx_dma_buffer[SLAVE_ADDRESS])) {
 #if (DEBUG_CONSOLE_EN > 0u)
             char debug_msg[DBUG_MSG_LEN];
-            snprintf(debug_msg, DBUG_MSG_LEN, "SlaveAddr:%#x\n\r", usart1_rx_dma_buffer[SLAVE_ADDRESS]);
+            snprintf(debug_msg, DBUG_MSG_LEN, "SlaveAddr:%#x\n\r",
+                     usart1_rx_dma_buffer[SLAVE_ADDRESS]);
             debug_console("Not my address, discard the frame!\r\n");
 #endif
         } else {
@@ -92,8 +95,10 @@ void DMA1_Channel5_IRQHandler(void) {
             debug_console("My address, Run Modbus_ParseRequest()!\r\n");
 #endif
         }
+        //TBD - start usart1_watchdog(USART1_RX_Buffer_Reset)
         USART1_RX_Buffer_Reset();
         DMA1_Channel15_Reload();
+        // u1tcFlag = false;
     }
 }
 
@@ -104,14 +109,25 @@ void DMA1_Channel5_IRQHandler(void) {
 void USART1_IRQHandler(void) {
     uint32_t status = USART1->SR;
     uint8_t  data __attribute__((unused));
+
+    /* Check for Read Data Register Not Empty interrupt */
+    if (status & USART_SR_RXNE) {
+#if (DEBUG_CONSOLE_EN > 0u)
+        debug_console("USART1 Read Data Register Not Empty!\r\n");
+#endif
+        u1tsFlag = true;
+    }
     /* Check for IDLE line interrupt */
     if (status & USART_SR_IDLE) {
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("USART1 Idle-line interrupt!\r\n");
 #endif
-        data = USART1->DR; /* Clear IDLE line flag */
-        if (u1tcFlag == TRUE) {
-            u1tcFlag = FALSE;
+        //TBD - Stop usart1_watchdog
+        if (u1tcFlag == true) {
+            u1tcFlag = false;
+            USART1_RX_Buffer_Reset();
+            DMA1_Channel15_Reload();
+            data = USART1->DR; /* Clear IDLE line flag */
         } else {
             // Error condition when USART1 DMA transmit complete flag is false and IDLE line
             // interrupt fires, reset DMA1 and buffer
@@ -122,6 +138,7 @@ void USART1_IRQHandler(void) {
 #endif
             USART1_RX_Buffer_Reset();
             DMA1_Channel15_Reload();
+            data = USART1->DR; /* Clear IDLE line flag */
         }
     }
 }

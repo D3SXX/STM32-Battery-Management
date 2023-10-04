@@ -2,13 +2,14 @@
 #define MODBUS_RTU_H
 #include <stddef.h>
 #include <stdint.h>
+#include "usart_config.h"
 
 /* Modbus RTU client parameters*/
 #define MODBUS_RTU_SLAVE_ADDR_THIS       (uint8_t)0x05
 #define MODBUS_REGISTER_SIZE             20
 #define MODBUS_REGISTER_ADDR_MIN         1
 #define MODBUS_REGISTER_ADDR_MAX         8
-#define MODBUS_BAUD_RATE                 9600
+#define MODBUS_BAUD_RATE                 USART_BAUDRATE
 #define MODBUS_FRAME_SILENT_WAIT_TIME_MS (int)(3.5 * 8 / MODBUS_BAUD_RATE)
 #define MODBUS_FRAME_REPLY_LENGTH        7
 #define MODBUS_FRAME_ERROR_REPLY_LENGTH  5

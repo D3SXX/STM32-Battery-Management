@@ -12,13 +12,13 @@
 #include <stdint.h>
 
 #define F_CPU                     32000000UL
-#define BAUDRATE                  9600U
-#define USART_BRR_VAL             (uint32_t)(F_CPU / BAUDRATE)
+#define USART_BAUDRATE            115200U
+#define USART_BRR_VAL             (uint32_t)(F_CPU / USART_BAUDRATE)
 #define USART1_RX_DMA_BUFFER_SIZE 8
 #define USART2_RX_DMA_BUFFER_SIZE 8
 
-extern uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
-extern char    usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
+extern _Atomic uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
+extern _Atomic uint8_t usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
 
 void USART1_dma_init(void);
 void USART1_write(const uint8_t data);

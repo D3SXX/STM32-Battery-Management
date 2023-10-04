@@ -165,7 +165,7 @@ void rs485_send_data(const uint8_t *data, const size_t len) {
     }
     while (!(USART2->SR & USART_SR_TC)) {
     }             /*!< Transmission Complete */
-    delay_ms(4);  // measured with oscilloscope, it can be a bit shorter    at 9600, 7bytes reply take 7.08ms 
+    delay_ms(3);  // measured with oscilloscope 
     RS485_TX_Disable();
 }
 
