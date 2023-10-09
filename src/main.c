@@ -133,8 +133,9 @@ void USART1_IRQHandler(void) {
             // interrupt fires, reset DMA1 and buffer
 #if (DEBUG_CONSOLE_EN > 0u)
             debug_console(
-                "Tranmition error!"
-                "IDLE line detected, but transmition complete flag is FALSE!\n\r");
+                "Error!"
+                "IDLE line detected, but transmition complete flag is FALSE!\n\r"
+                "Received modbus frame length is lesser than expected.\n\r");
 #endif
             USART1_RX_Buffer_Reset();
             DMA1_Channel15_Reload();
@@ -146,6 +147,11 @@ void USART1_IRQHandler(void) {
         if (usart1_rx_dma_buffer[0] != NULL) {
             USART1_RX_Buffer_Reset();
             DMA1_Channel15_Reload();
+#if (DEBUG_CONSOLE_EN > 0u)
+            debug_console(
+                "ERROR! Transmition complete. But USART1_RX buffer is not empty." 
+                "Received modbus frame length is greater than expected.\r\n");
+#endif
         }
     }
 }
