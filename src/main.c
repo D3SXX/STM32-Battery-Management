@@ -95,7 +95,7 @@ void DMA1_Channel5_IRQHandler(void) {
             debug_console("My address, Run Modbus_ParseRequest()!\r\n");
 #endif
         }
-        //TBD - start usart1_watchdog(USART1_RX_Buffer_Reset)
+        // TBD - start usart1_watchdog(USART1_RX_Buffer_Reset)
         USART1_RX_Buffer_Reset();
         DMA1_Channel15_Reload();
         // u1tcFlag = false;
@@ -122,7 +122,7 @@ void USART1_IRQHandler(void) {
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("USART1 Idle-line interrupt!\r\n");
 #endif
-        //TBD - Stop usart1_watchdog
+        // TBD - Stop usart1_watchdog
         if (u1tcFlag == true) {
             u1tcFlag = false;
             USART1_RX_Buffer_Reset();
@@ -139,6 +139,13 @@ void USART1_IRQHandler(void) {
             USART1_RX_Buffer_Reset();
             DMA1_Channel15_Reload();
             data = USART1->DR; /* Clear IDLE line flag */
+        }
+    }
+    /* Check Tranmission complete intrrupt */
+    if (status & USART_SR_TC) {
+        if (usart1_rx_dma_buffer[0] != NULL) {
+            USART1_RX_Buffer_Reset();
+            DMA1_Channel15_Reload();
         }
     }
 }
