@@ -1,0 +1,20 @@
+Version 4
+SymbolType BLOCK
+RECTANGLE Normal 112 64 -96 -48
+WINDOW 0 8 -56 Bottom 2
+SYMATTR Description N-channel mosfet power control
+PIN -96 -16 LEFT 8
+PINATTR PinName G1_IN
+PINATTR SpiceOrder 1
+PIN -96 16 LEFT 8
+PINATTR PinName G2_IN
+PINATTR SpiceOrder 2
+PIN 112 -32 RIGHT 8
+PINATTR PinName BATT_N
+PINATTR SpiceOrder 3
+PIN 0 64 BOTTOM 8
+PINATTR PinName GND
+PINATTR SpiceOrder 4
+PIN 112 32 RIGHT 8
+PINATTR PinName PSU_N
+PINATTR SpiceOrder 5
