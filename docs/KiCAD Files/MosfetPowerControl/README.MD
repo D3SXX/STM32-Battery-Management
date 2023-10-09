@@ -11,10 +11,9 @@ https://en.wikipedia.org/wiki/MOSFET
 
 ### Body diode
 
-The existance of body diode in mosfet causing the current could flow to the forward direction of the body diode, even though the gate is off. 
+The existance of body diode in mosfet causing the current could flow to the forward direction of the body diode, even though the gate is off.
 
 ![1696489915847](image/README/1696489915847.png)
-
 
 # FDS6890A
 
@@ -39,7 +38,6 @@ N-Channel Mosfets in series offer extra control of the current due to in body di
 
 ![1696499283589](image/README/1696499283589.png)
 
-
 Be aware, the physical diodes D1 and D2 were added only for demostration of in body diode of the N-Channel mosfet. There's no actual physical dioded added to the circuit.
 
 The current control follows the following truth table.
@@ -51,8 +49,17 @@ The current control follows the following truth table.
 | 1      | 0      | Bottom to Up      | OFF     | ON          |
 | 1      | 1      | Bidirectio        | ON      | ON          |
 
-
 https://www.powerelectronictips.com/remember-mosfet-body-diode-faq/
+
+### PCB Circuit
+
+![1696845039316](image/README/1696845039316.png)
+
+### Simulation
+
+![1696845124387](image/README/1696845124387.png)
+
+![1696845249193](image/README/1696845249193.png)
 
 ## Control Logic In Practice
 
