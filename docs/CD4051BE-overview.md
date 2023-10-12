@@ -17,15 +17,16 @@ a logic “1” is present at the inhibit input terminal, all
 channels are off.") and this frees up an additional pin on the microcontroller board.
 - A (Pin 11), B (Pin 10), C (Pin 9) must be connected to digital pins on the board.
 - Channels (Chronologically pins 13,14,15,12,1,5,2,4) are measured from 0 to 7 and can either be connected or left unconnected to anything, (e.g. connected to the temperature sensore output).
+- COM OUT/IN (Pin 3) must be connected to Analog input (e.g. A0, A1) on stm32.
 
 ### Truth Table ([CD4051BE Datasheet p. 5](/datasheet/CD4051BE-Texas-Instruments.pdf))
 
 <p style="text-align:center;"><img src="image/CD4051BE-Truth-Table.png" alt="CD4051BE-Truth-Table" class="centerImage"/></p>
 
-### Pinout [CD4051BE Datasheet p. 3](/datasheet/CD4051BE-Texas-Instruments.pdf)
+### Pinout ([CD4051BE Datasheet p. 3](/datasheet/CD4051BE-Texas-Instruments.pdf))
 
 <p style="text-align:center;"><img src="image/CD4051BE-Pinout.png" alt="CD4051BE-Pinout" class="centerImage"/></p>
 
-## Chip
+### Chip
 
 <p style="text-align:center;"><img src="image/CD4051BE-Chip.png" width="200" alt="CD4051BE-Chip" class="centerImage"/></p>
