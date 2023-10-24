@@ -36,7 +36,7 @@ https://woopcb.com/blog/what-is-vcc-vss-vdd-vee-in-electronics
 
 N-Channel Mosfets in series offer extra control of the current due to in body diode. And puting mosfet-series-array in parrallel allow the mosfets to handle more current. In theory I_total_max = I_mosfet_max * N
 
-![1696499283589](image/README/1696499283589.png)
+![1697093138755](image/README/1697093138755.png)
 
 Be aware, the physical diodes D1 and D2 were added only for demostration of in body diode of the N-Channel mosfet. There's no actual physical dioded added to the circuit.
 
@@ -51,6 +51,10 @@ The current control follows the following truth table.
 
 https://www.powerelectronictips.com/remember-mosfet-body-diode-faq/
 
+* Pull Down Resister: 22K
+* IO current limit Resister: Ceil(3.3V / 25mA * 4) = 560R
+
+![1697093219523](image/README/1697093219523.png)
 ### PCB Circuit
 
 ![1696845039316](image/README/1696845039316.png)
