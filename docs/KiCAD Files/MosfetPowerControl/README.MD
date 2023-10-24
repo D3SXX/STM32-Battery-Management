@@ -55,6 +55,15 @@ https://www.powerelectronictips.com/remember-mosfet-body-diode-faq/
 * IO current limit Resister: Ceil(3.3V / 25mA * 4) = 560R
 
 ![1697093219523](image/README/1697093219523.png)
+### PCB Circuit
+
+![1696845039316](image/README/1696845039316.png)
+
+### Simulation
+
+![1696845124387](image/README/1696845124387.png)
+
+![1696845249193](image/README/1696845249193.png)
 
 ## Control Logic In Practice
 

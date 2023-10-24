@@ -21,9 +21,13 @@ Basically it is the technique to which uses a very small known resistor in serie
 
 https://www.analog.com/en/app-notes/an-105fa.html
 
+In thie project, the shunt needs to detect bi-directional current. Therefore, the extra circuit is needed to convert voltage from range[-4V, +4-V] to range[0V, 3V].
+
+![1696843874125](image/README/1696843874125.png)
+
 ### Differential Input Amplifier
 
-As the name implies. 
+As the name implies.
 
 ![1696508257660](image/README/1696508257660.png)
 
@@ -31,4 +35,12 @@ Texas Instrument 00_opam_handbook.pdf P.24
 
 ## Multi Cell Battery Meter Circuit
 
-![1696508456106](image/README/1696508456106.png)
+In order to measure each cell's voltage accurately, Differential Input Amplifiers were used. And a 3-to-8 multiplexer was used to reduce the ADC I/O demands on Microcontroller. This design also left room for four extra battery cells. 
+
+### Indivitual Voltage Meter Circuit
+
+![1696843990732](image/README/1696843990732.png)
+
+### Simulation Circuit
+
+![1696844014105](image/README/1696844014105.png)
