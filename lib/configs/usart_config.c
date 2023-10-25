@@ -14,6 +14,7 @@
 
 /**
  * \brief           Initialize USART1 with DMA in normal mode on RX
+ *                  USART1 is used for Modbus over RS485
  */
 void USART1_dma_init(void) {
     /*
@@ -44,7 +45,7 @@ void USART1_dma_init(void) {
     DMA1_Channel5->CNDTR = (uint16_t)USART1_RX_DMA_BUFFER_SIZE; /*!< Set data length */
 
     /* DMA interrupt init */
-    NVIC_SetPriority(DMA1_Channel5_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+    NVIC_SetPriority(DMA1_Channel5_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 0));
     NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
     /* USART configuration */
@@ -72,7 +73,7 @@ void USART1_dma_init(void) {
     USART1->CR1 |= USART_CR1_IDLEIE;  // Enable idle line detection interrupt
 
     /* USART interrupt */
-    NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+    NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 1));
     NVIC_EnableIRQ(USART1_IRQn);
 
     /* Enable USART and DMA */
@@ -171,6 +172,7 @@ void rs485_send_data(const uint8_t *data, const size_t len) {
 
 /**
  * \brief           Initialize USART2 with DMA in normal mode on RX
+ *                  USART2 is used for debug console
  */
 void USART2_dma_init(void) {
     /*
@@ -200,7 +202,7 @@ void USART2_dma_init(void) {
     DMA1_Channel6->CNDTR = (uint16_t)USART2_RX_DMA_BUFFER_SIZE; /*!< Set data length */
 
     /* DMA interrupt init */
-    NVIC_SetPriority(DMA1_Channel6_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+    NVIC_SetPriority(DMA1_Channel6_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 2, 0));
     NVIC_EnableIRQ(DMA1_Channel6_IRQn);
 
     /* USART configuration */
@@ -219,7 +221,7 @@ void USART2_dma_init(void) {
     USART2->CR1 |= USART_CR1_IDLEIE;  // Enable idle line detection interrupt
 
     /* USART interrupt */
-    NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+    NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 2, 1));
     NVIC_EnableIRQ(USART2_IRQn);
 
     /* Enable USART and DMA */
