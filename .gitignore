@@ -3,3 +3,5 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+docs/KiCAD Files/MosfetPowerControl/MosfetPowerControl-backups/
+iot-ticket/iotticket/__pycache__/
