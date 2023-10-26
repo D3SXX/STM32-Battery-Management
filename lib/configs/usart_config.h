@@ -17,12 +17,12 @@
 #define USART1_RX_DMA_BUFFER_SIZE 8
 #define USART2_RX_DMA_BUFFER_SIZE 8
 
-extern _Atomic uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
-extern _Atomic uint8_t usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
+uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
+uint8_t usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
 
 void USART1_dma_init(void);
 void USART1_write(const uint8_t data);
-void USART1_RX_Buffer_Reset();
+void USART1_RX_DMA_Buffer_Reset();
 void DMA1_Channel15_Reload(void);
 void rs485_send_data(const uint8_t* data, const size_t len);
 

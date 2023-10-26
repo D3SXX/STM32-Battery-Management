@@ -57,6 +57,8 @@ typedef enum {
     MODBUS_RTU_ERR_BAD_REGISTER_ADDR,
     MODBUS_RTU_ERR_BAD_CRC,
     MODBUS_RTU_ERR_BAD_SLAVE_ADDR = 20,
+    MODBUS_RTU_ERR_BAD_FRAME_OVERSIZE,
+    MODBUS_RTU_ERR_BAD_FRAME_UNDERSIZE,
     MODBUS_RTU_ERR_NOT_SUPPORTED
 } MODBUS_RTU_ERR;
 
@@ -77,5 +79,4 @@ MODBUS_RTU_ERR modbusRtu_AddressValidation(const uint8_t address);
 MODBUS_RTU_ERR modbusRtu_FunctionCodeValidation(const uint8_t function_code);
 MODBUS_RTU_ERR modbusRtu_RegisterAddressValidation(const uint16_t reg_addr);
 MODBUS_RTU_ERR modbusRtu_CrcCheck(const uint8_t *const modbus_rtu_frame);
-
 #endif

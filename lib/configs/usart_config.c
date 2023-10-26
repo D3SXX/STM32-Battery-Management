@@ -143,7 +143,7 @@ void USART1_write(const uint8_t data) {
 /**
  * \brief           Reset USART1_rx buffer
  */
-void USART1_RX_Buffer_Reset(void) { memset(usart1_rx_dma_buffer, 0, USART1_RX_DMA_BUFFER_SIZE); }
+void USART1_RX_DMA_Buffer_Reset(void) { memset(usart1_rx_dma_buffer, 0, USART1_RX_DMA_BUFFER_SIZE); }
 
 /**
  * \brief           Reload and re-enable DMA1_channel5
@@ -280,7 +280,7 @@ char USART2_read() {
 /**
  * \brief           Rest USART2 RX buffer
  */
-void USART2_RX_Buffer_Reset() { memset(usart2_rx_dma_buffer, 0, USART2_RX_DMA_BUFFER_SIZE); }
+void USART2_RX_DMA_Buffer_Reset() { memset(usart2_rx_dma_buffer, 0, USART2_RX_DMA_BUFFER_SIZE); }
 
 /**
  * \brief           Reload and re-enable DMA1_channel5
