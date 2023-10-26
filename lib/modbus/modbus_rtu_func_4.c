@@ -44,6 +44,7 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
     } else {
         switch (register_addr) {
             case REG_ADDR_CELL1_VOLT:
+            // data = modbus_registers[REG_ADDR_CELL1_VOLT];
                 result = adc_read_cell_voltage(1, &data);
                 if (result != true) {
                     err = MODBUS_RTU_ERR_NOT_SUPPORTED;
@@ -59,18 +60,22 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
                 break;
             case REG_ADDR_CELL2_VOLT:
                 // TBD
+                // data = modbus_registers[REG_ADDR_CELL2_VOLT]
                 return MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
                 break;
             case REG_ADDR_CELL3_VOLT:
                 // TBD
+                // data = modbus_registers[REG_ADDR_CELL3_VOLT];
                 return MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
                 break;
             case REG_ADDR_CELL4_VOLT:
                 // TBD
+                // data = modbus_registers[REG_ADDR_CELL4_VOLT];
                 return MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
                 break;
             case REG_ADDR_BATT_CURRENT:
                 // TBD
+                // data = modbus_registers[REG_ADDR_BATT_CURRENT];
                 result = adc_read_batt_current(&data);
                 if (result != true) {
                     err = MODBUS_RTU_ERR_NOT_SUPPORTED;
@@ -87,6 +92,7 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
                 break;
             case REG_ADDR_BATT_TEMP:
                 // TBD
+                // data = modbus_registers[REG_ADDR_BATT_TEMP];
                 result = adc_read_batt_temp(&data);
                 if (result != true) {
                     err = MODBUS_RTU_ERR_NOT_SUPPORTED;
