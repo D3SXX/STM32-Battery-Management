@@ -302,7 +302,7 @@ bool mux_read (int *chan, uint32_t C,uint32_t B,uint32_t A, int *data){ // Possi
 // Modify a value thru pointer, return Bool (to do)
 int read_times = 5;  // Specify the amount of reads
 int adc_values[read_times];
-if(*chan > 3) *chan = 0;
+if(*chan > 7) *chan = 0;
 switch (*chan) // C B A
 {
 case 0: // 0 0 0
