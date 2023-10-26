@@ -1,4 +1,4 @@
-/*Authors : Sergiu P. & Vladislav R., Date : 29.09.2023 
+/*Authors : Vladislav R., Date : 25.10.2023 
 Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
 
 This code here showcases: 
@@ -6,6 +6,7 @@ Reading ADC values for Analog input A0 and A1 with LL
 Using USART with LL 
 Using GPIO with LL (output using pins D3,D4,D5)
 Manipulation of CD4051BE multiplexer
+Measuring Negative temperature using lm35 
 
 // Changes
 
@@ -13,8 +14,10 @@ Manipulation of CD4051BE multiplexer
 // Made mux read function bool
 // data and channel now modified using pointer in the function
 // Added an example of false return
+// lm35 now measures negative voltages
 
-// Note: For now works with only 1 multiplexer
+// Notes: For now works with only 1 multiplexer
+// lm35 is connected to mux channels 1 and 3 (can be changed on lines 129 and 132 by replacing digits (channel-1) in cases)
 
 /*Includes */
 #include <stddef.h>
@@ -95,20 +98,22 @@ int main(void)
 	// Pin A
 	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_3,LL_GPIO_OUTPUT_PUSHPULL); // Configure pin as a push-pull output
 	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_3, LL_GPIO_MODE_OUTPUT); // Configure Pin to be output
-	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_3,LL_GPIO_PULL_NO); // Disable pull-up and pull-down resistors
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_3,LL_GPIO_PULL_DOWN); // Disable pull-up and pull-down resistors
 	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_3, LL_GPIO_SPEED_FREQ_HIGH); // Set pin speed to HIGH
 	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_4,LL_GPIO_OUTPUT_PUSHPULL); // Pin C
 	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_4, LL_GPIO_MODE_OUTPUT); 
-	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_4,LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_4,LL_GPIO_PULL_DOWN);
 	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_4, LL_GPIO_SPEED_FREQ_HIGH);
 	LL_GPIO_SetPinOutputType(GPIOB,LL_GPIO_PIN_5,LL_GPIO_OUTPUT_PUSHPULL); // Pin B
 	LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT);
-	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_5,LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_5,LL_GPIO_PULL_DOWN);
 	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_5, LL_GPIO_SPEED_FREQ_HIGH);
 
 	/* Infinite loop */
 	int channel=0;
-  
+	int v1,v2;
+	int temp_voltage = 0, temp_degrees = 0;
+	
 	while (1)
 	{
 		int adc_A0;
@@ -120,12 +125,23 @@ int main(void)
 	  	else
 			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
 
+		switch (channel){ // Collecting voltages for positive and negative outputs of lm35
+			case 2:
+				v1 = adc_A0 * (3.3/4095) * 1000; // Straight convert to millivolts
+				break;
+			case 4:
+				v2 = adc_A0 * (3.3/4095) * 1000;
+				break;
+		}
 		/*Prepare data for USART2 Output (A0)*/
 		float voltage_A0 = adc_A0 * (3.3/4095); // Calculate voltage
 		voltage_A0 = voltage_A0 * 1000;
 		int volt_integer=(int)voltage_A0;
+		if (v1 && v2){
+			temp_voltage = v1-v2; // Calculating temperature for lm35 by subtracting positive output and negative output
+		}
 		if (check)
-			sprintf(buf,"CH%d_ADC=%d CH%d_Volt=%dmV CH%d_Temp=%dC",channel-1,adc_A0,channel-1,volt_integer,channel-1,(int)volt_integer/10);
+			sprintf(buf,"CH%d_ADC=%d CH%d_Volt=%dmV CH%d_Temp=%dC",channel-1,adc_A0,channel-1,volt_integer,channel-1,temp_voltage/10);
 		else
 			sprintf(buf,"Error reading LM35");
 
@@ -153,13 +169,15 @@ int main(void)
   return 0;
 }
 
-int read_adc_A0(void)
-{
+void adc_a0_config(){
 	/*Configure ADC*/
 	LL_ADC_REG_SetSequencerRanks(ADC1,LL_ADC_REG_RANK_1,LL_ADC_CHANNEL_0); // Specify the sequence of channels for ADC1	(make channel 0 to be the first in sequence)
 	LL_ADC_Enable(ADC1); // Enable ADC1
 	LL_ADC_REG_StartConversionSWStart(ADC1); // Start conversion using Software Trigger
+}
 
+int read_adc_A0(void)
+{
 	/*Read ADC*/
 	while(!LL_ADC_IsActiveFlag_ADRDY(ADC1)){} // Wait until ADC1 is ready (flag is set)
 	int result = LL_ADC_REG_ReadConversionData12(ADC1); //Read ADC1 using 12 bits
@@ -335,10 +353,11 @@ default: // 0 0 0
 }
 	LL_mDelay(5); // We have to wait for a switch (about 1 ms measured with oscilloscope), otherwise we get garbage values
 	/*Read channels read_times times*/
+	adc_a0_config(); // Configure ADC only once when starting the readings
 	for(int k=0;k<read_times-1;k++)
 	{
 			adc_values[k] = read_adc_A0(); // Read A0 and record its output to an array
-			LL_mDelay(50); // 50 ms delay for each reading
+			LL_mDelay(1); // 1 ms delay for each reading
 	}
 	*data = find_median(adc_values,read_times);
 
