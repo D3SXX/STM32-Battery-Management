@@ -1,0 +1,307 @@
+Circuit: * C:\Users\siyxu\Documents\vamk\EmbeddedSystemProject\Schematics\MultiCellBatteryMeter\MultiCellBatteryMeterBlockSim.asc
+
+WARNING: Less than two connections to node vs-.  This node is used by v6.
+Ignoring empty pin current: Ix(u6:1)
+Ignoring empty pin current: Ix(u6:2)
+Ignoring empty pin current: Ix(u6:99)
+Ignoring empty pin current: Ix(u6:50)
+Ignoring empty pin current: Ix(u6:28)
+Ignoring empty pin current: Ix(u7:1)
+Ignoring empty pin current: Ix(u7:2)
+Ignoring empty pin current: Ix(u7:99)
+Ignoring empty pin current: Ix(u7:50)
+Ignoring empty pin current: Ix(u7:28)
+Ignoring empty pin current: Ix(u9:1)
+Ignoring empty pin current: Ix(u9:2)
+Ignoring empty pin current: Ix(u9:99)
+Ignoring empty pin current: Ix(u9:50)
+Ignoring empty pin current: Ix(u9:28)
+Ignoring empty pin current: Ix(u10:1)
+Ignoring empty pin current: Ix(u10:2)
+Ignoring empty pin current: Ix(u10:99)
+Ignoring empty pin current: Ix(u10:50)
+Ignoring empty pin current: Ix(u10:28)
+Ignoring empty pin current: Ix(u11:1)
+Ignoring empty pin current: Ix(u11:2)
+Ignoring empty pin current: Ix(u11:99)
+Ignoring empty pin current: Ix(u11:50)
+Ignoring empty pin current: Ix(u11:28)
+Ignoring empty pin current: Ix(u1:1)
+Ignoring empty pin current: Ix(u1:2)
+Ignoring empty pin current: Ix(u1:99)
+Ignoring empty pin current: Ix(u1:50)
+Ignoring empty pin current: Ix(u1:28)
+Ignoring empty pin current: Ix(x1:vs-)
+Direct Newton iteration failed to find .op point.  (Use ".option noopiter" to skip.)
+Starting Gmin stepping
+Gmin = 10
+Gmin = 1.07374
+vernier = 0.5
+vernier = 0.25
+vernier = 0.125
+vernier = 0.0625
+Gmin = 1.1391
+vernier = 0.03125
+vernier = 0.015625
+vernier = 0.0078125
+vernier = 0.00390625
+vernier = 0.00195312
+Gmin = 1.14793
+vernier = 0.000976562
+vernier = 0.000488281
+Gmin = 0
+Gmin stepping failed
+
+Starting source stepping with srcstepmethod=0
+Source Step = 3.0303%
+Source Step = 33.3333%
+Source Step = 63.6364%
+Source Step = 88.6364%
+vernier = 0.0625
+Source Step = 88.3049%
+Source Step = 88.7784%
+Source Step = 89.2519%
+Source Step = 89.7254%
+Source Step = 90.1989%
+vernier = 0.0234375
+Source Step = 90.8617%
+Source Step = 91.572%
+Source Step = 92.2822%
+Source Step = 92.9924%
+Source Step = 93.7027%
+vernier = 0.0351562
+Source Step = 94.6615%
+Source Step = 95.7268%
+Source Step = 96.7921%
+Source Step = 97.8575%
+Source Step = 98.9228%
+vernier = 0.0527344
+Source stepping succeeded in finding the operating point.
+
+Semiconductor Device Operating Points:
+                        --- Diodes ---
+Name:   d:x1:u5:1   d:x1:u5:2   d:x1:u5:3   d:x1:u5:4   d:x1:u5:5
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -3.99e-09   -8.01e-09   -8.00e-09   -4.00e-09   -3.99e-09
+Vd:     -3.99e+00   -8.01e+00   -8.00e+00   -4.00e+00   -3.99e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:   d:x1:u5:6   d:x1:u5:7   d:x1:u5:8   d:x1:u5:9  d:x1:u5:10
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -8.01e-09   -8.00e-09   -4.00e-09   -3.99e-09   -8.01e-09
+Vd:     -8.01e+00   -8.00e+00   -4.00e+00   -3.99e+00   -8.01e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u5:11  d:x1:u5:12  d:x1:u5:13  d:x1:u5:14  d:x1:u5:15
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -8.00e-09   -4.00e-09   -3.99e-09   -8.01e-09   -8.00e-09
+Vd:     -8.00e+00   -4.00e+00   -3.99e+00   -8.01e+00   -8.00e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u5:16  d:x1:u5:33  d:x1:u5:34  d:x1:u5:35  d:x1:u5:36
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -4.00e-09   -3.99e-09   -8.01e-09   -6.00e-09   -6.00e-09
+Vd:     -4.00e+00   -3.99e+00   -8.01e+00   -6.00e+00   -6.00e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u5:37  d:x1:u5:38  d:x1:u5:39  d:x1:u5:40  d:x1:u5:41
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -3.99e-09   -8.01e-09   -6.00e-09   -6.00e-09   -3.99e-09
+Vd:     -3.99e+00   -8.01e+00   -6.00e+00   -6.00e+00   -3.99e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u5:42  d:x1:u5:43  d:x1:u5:44  d:x1:u5:45  d:x1:u5:46
+Model:   x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d     x1:u5:d
+Id:     -8.01e-09   -6.00e-09   -6.00e-09   -3.99e-09   -8.01e-09
+Vd:     -8.01e+00   -6.00e+00   -6.00e+00   -3.99e+00   -8.01e+00
+Req:     1.00e-09    1.00e-09    1.00e-09    1.00e-09    1.00e-09
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u5:47  d:x1:u5:48   d:x1:u6:1   d:x1:u6:2   d:x1:u6:5
+Model:   x1:u5:d     x1:u5:d    x1:u6:dx    x1:u6:dx    x1:u6:dx
+Id:     -6.00e-09   -6.00e-09   -6.35e-12   -3.39e-12    1.77e-05
+Vd:     -6.00e+00   -6.00e+00   -6.35e+00   -3.39e+00    6.10e-01
+Req:     1.00e-09    1.00e-09    1.00e+12    1.00e+12    1.46e+03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:   d:x1:u6:6   d:x1:u6:4   d:x1:u6:3   d:x1:u7:1   d:x1:u7:2
+Model:  x1:u6:dx    x1:u6:dx    x1:u6:dx    x1:u7:dx    x1:u7:dx
+Id:      7.61e-05   -2.90e-13   -2.52e-13   -1.04e-11    2.44e-05
+Vd:      6.48e-01   -2.89e-01   -2.51e-01   -1.04e+01    6.19e-01
+Req:     3.40e+02    1.00e+12    1.00e+12    1.00e+12    1.06e+03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:   d:x1:u7:5   d:x1:u7:6   d:x1:u7:4   d:x1:u7:3   d:x1:u9:1
+Model:  x1:u7:dx    x1:u7:dx    x1:u7:dx    x1:u7:dx    x1:u9:dx
+Id:      7.57e-05    1.78e-05   -2.52e-13   -2.90e-13   -6.40e-12
+Vd:      6.48e-01    6.10e-01   -2.51e-01   -2.89e-01   -6.40e+00
+Req:     3.42e+02    1.46e+03    1.00e+12    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:   d:x1:u9:2   d:x1:u9:5   d:x1:u9:6   d:x1:u9:4   d:x1:u9:3
+Model:  x1:u9:dx    x1:u9:dx    x1:u9:dx    x1:u9:dx    x1:u9:dx
+Id:     -3.33e-12    1.50e-04    8.55e-06   -2.33e-13   -3.09e-13
+Vd:     -3.33e+00    6.66e-01    5.92e-01   -2.32e-01   -3.08e-01
+Req:     1.00e+12    1.72e+02    3.02e+03    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u10:1  d:x1:u10:2  d:x1:u10:5  d:x1:u10:6  d:x1:u10:4
+Model:  x1:u10:dx   x1:u10:dx   x1:u10:dx   x1:u10:dx   x1:u10:dx
+Id:     -6.40e-12   -3.34e-12    1.12e-04    1.18e-05   -2.41e-13
+Vd:     -6.40e+00   -3.34e+00    6.58e-01    6.00e-01   -2.40e-01
+Req:     1.00e+12    1.00e+12    2.32e+02    2.19e+03    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u10:3  d:x1:u11:1  d:x1:u11:2  d:x1:u11:5  d:x1:u11:6
+Model:  x1:u10:dx   x1:u11:dx   x1:u11:dx   x1:u11:dx   x1:u11:dx
+Id:     -3.01e-13   -6.41e-12   -3.32e-12    2.06e-04    6.03e-06
+Vd:     -3.00e-01   -6.41e+00   -3.32e+00    6.74e-01    5.82e-01
+Req:     1.00e+12    1.00e+12    1.00e+12    1.26e+02    4.29e+03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:  d:x1:u11:4  d:x1:u11:3   d:x1:u1:1   d:x1:u1:2   d:x1:u1:5
+Model:  x1:u11:dx   x1:u11:dx   x1:u1:dx    x1:u1:dx    x1:u1:dx
+Id:     -2.24e-13   -3.18e-13   -6.35e-12   -3.38e-12    2.33e-05
+Vd:     -2.23e-01   -3.17e-01   -6.35e+00   -3.38e+00    6.17e-01
+Req:     1.00e+12    1.00e+12    1.00e+12    1.00e+12    1.11e+03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:   d:x1:u1:6   d:x1:u1:4   d:x1:u1:3
+Model:  x1:u1:dx    x1:u1:dx    x1:u1:dx
+Id:      5.83e-05   -2.83e-13   -2.59e-13
+Vd:      6.41e-01   -2.82e-01   -2.58e-01
+Req:     4.44e+02    1.00e+12    1.00e+12
+CAP:     0.00e+00    0.00e+00    0.00e+00
+
+                        --- Bipolar Transistors ---
+Name:    q:x1:u6:1   q:x1:u6:2   q:x1:u7:1   q:x1:u7:2   q:x1:u9:1
+Model:   x1:u6:qx    x1:u6:qx    x1:u7:qx    x1:u7:qx    x1:u9:qx
+Ib:      -4.49e-08   -4.50e-08   -2.64e-08   -6.36e-08   -4.49e-08
+Ic:      -4.99e-05   -5.00e-05   -2.93e-05   -7.06e-05   -4.99e-05
+Vbe:     -6.97e-01   -6.97e-01   -6.83e-01   -7.06e-01   -6.97e-01
+Vbc:      3.98e+00    3.98e+00    1.18e+00    1.14e+00    7.98e+00
+Vce:     -4.67e+00   -4.67e+00   -1.86e+00   -1.84e+00   -8.67e+00
+BetaDC:   1.11e+03    1.11e+03    1.11e+03    1.11e+03    1.11e+03
+Gm:       1.93e-03    1.93e-03    1.13e-03    2.73e-03    1.93e-03
+Rpi:      5.75e+05    5.75e+05    9.81e+05    4.07e+05    5.75e+05
+Rx:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Ro:       1.52e+81    1.51e+81    1.65e+34    3.00e+33    0.00e+00
+Cbe:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbc:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cjs:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+BetaAC:   1.11e+03    1.11e+03    1.11e+03    1.11e+03    1.11e+03
+Cbx:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Ft:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    q:x1:u9:2  q:x1:u10:1  q:x1:u10:2  q:x1:u11:1  q:x1:u11:2
+Model:   x1:u9:qx    x1:u10:qx   x1:u10:qx   x1:u11:qx   x1:u11:qx
+Ib:      -4.50e-08   -4.49e-08   -4.50e-08   -4.49e-08   -4.50e-08
+Ic:      -5.00e-05   -4.99e-05   -5.00e-05   -4.99e-05   -5.00e-05
+Vbe:     -6.97e-01   -6.97e-01   -6.97e-01   -6.97e-01   -6.97e-01
+Vbc:      7.98e+00    5.98e+00    5.98e+00    7.98e+00    7.98e+00
+Vce:     -8.67e+00   -6.67e+00   -6.67e+00   -8.67e+00   -8.67e+00
+BetaDC:   1.11e+03    1.11e+03    1.11e+03    1.11e+03    1.11e+03
+Gm:       1.93e-03    1.93e-03    1.93e-03    1.93e-03    1.93e-03
+Rpi:      5.75e+05    5.75e+05    5.75e+05    5.75e+05    5.75e+05
+Rx:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Ro:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbe:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbc:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cjs:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+BetaAC:   1.11e+03    1.11e+03    1.11e+03    1.11e+03    1.11e+03
+Cbx:      0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Ft:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:    q:x1:u1:1   q:x1:u1:2
+Model:   x1:u1:qx    x1:u1:qx
+Ib:      -4.49e-08   -4.50e-08
+Ic:      -4.99e-05   -5.00e-05
+Vbe:     -6.97e-01   -6.97e-01
+Vbc:      3.98e+00    3.98e+00
+Vce:     -4.67e+00   -4.67e+00
+BetaDC:   1.11e+03    1.11e+03
+Gm:       1.93e-03    1.93e-03
+Rpi:      5.75e+05    5.75e+05
+Rx:       0.00e+00    0.00e+00
+Ro:       1.53e+81    1.52e+81
+Cbe:      0.00e+00    0.00e+00
+Cbc:      0.00e+00    0.00e+00
+Cjs:      0.00e+00    0.00e+00
+BetaAC:   1.11e+03    1.11e+03
+Cbx:      0.00e+00    0.00e+00
+Ft:       0.00e+00    0.00e+00
+
+                        --- VDMOSFET Transistors ---
+Name:       m:x1:u5:1   m:x1:u5:3   m:x1:u5:5   m:x1:u5:7  m:x1:u5:17
+Model:       x1:u5:n     x1:u5:n     x1:u5:n     x1:u5:n     x1:u5:n
+Id:         -7.53e-15   -9.88e-06   -1.19e-14   -1.21e-14   -2.00e-12
+Vgs:        -1.11e+01    9.16e-01   -1.11e+01   -1.11e+01   -1.31e+01
+Vds:        -7.53e-03   -1.16e-02   -1.19e-02   -1.21e-02   -2.00e+00
+Vth:         1.00e-01    1.00e-01    1.00e-01    1.00e-01    1.00e-01
+Gm:          0.00e+00    1.20e-05    0.00e+00    0.00e+00    0.00e+00
+Gds:         0.00e+00    9.04e-04    0.00e+00    0.00e+00    0.00e+00
+Cgs:         6.93e-15    6.93e-15    6.93e-15    6.93e-15    6.93e-15
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbody:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:      m:x1:u5:19  m:x1:u5:21  m:x1:u5:23   m:x1:u5:2   m:x1:u5:4
+Model:       x1:u5:n     x1:u5:n     x1:u5:n     x1:u5:p     x1:u5:p
+Id:         -2.00e-12   -2.00e-12   -2.00e-12    7.53e-15    2.50e-05
+Vgs:        -1.31e+01   -1.31e+01   -1.31e+01    7.76e+00   -4.24e+00
+Vds:        -2.00e+00   -2.00e+00   -2.00e+00    7.53e-03    1.16e-02
+Vth:         1.00e-01    1.00e-01    1.00e-01   -1.00e-01   -1.00e-01
+Gm:          0.00e+00    0.00e+00    0.00e+00    0.00e+00    6.03e-06
+Gds:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    2.28e-03
+Cgs:         6.93e-15    6.93e-15    6.93e-15    6.93e-15    6.93e-15
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbody:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:       m:x1:u5:6   m:x1:u5:8  m:x1:u5:18  m:x1:u5:20  m:x1:u5:22
+Model:       x1:u5:p     x1:u5:p     x1:u5:p     x1:u5:p     x1:u5:p
+Id:          1.19e-14    1.21e-14    2.00e-12    2.00e-12    2.00e-12
+Vgs:         7.76e+00    7.76e+00    7.76e+00    7.76e+00    7.76e+00
+Vds:         1.19e-02    1.21e-02    2.00e+00    2.00e+00    2.00e+00
+Vth:        -1.00e-01   -1.00e-01   -1.00e-01   -1.00e-01   -1.00e-01
+Gm:          0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Gds:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cgs:         6.93e-15    6.93e-15    6.93e-15    6.93e-15    6.93e-15
+Cgd:         0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+Cbody:       0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:      m:x1:u5:24
+Model:       x1:u5:p
+Id:          2.00e-12
+Vgs:         7.76e+00
+Vds:         2.00e+00
+Vth:        -1.00e-01
+Gm:          0.00e+00
+Gds:         0.00e+00
+Cgs:         6.93e-15
+Cgd:         0.00e+00
+Cbody:       0.00e+00
+
+
+
+Date: Fri Oct  6 15:46:57 2023
+Total elapsed time: 6.816 seconds.
+
+tnom = 27
+temp = 27
+method = trap
+totiter = 714
+traniter = 0
+tranpoints = 0
+accept = 0
+rejected = 0
+matrix size = 297
+fillins = 393
+solver = Normal
+Avg thread counts: 6.2/0.0/12.0/6.2
+Matrix Compiler1: 33.61 KB object code size
+Matrix Compiler2: 32.02 KB object code size  3.9/6.0/[2.6]
+

@@ -1,0 +1,43 @@
+# Report 19.09.2023 
+
+- Host - Vladislav 
+
+- Participants - Siyuan, Samuel, Sergiu
+
+## Group Progress: 
+
+- Siyuan: Studied LL, Clock 
+
+- Samuel: researched his issue on github (temperature cell) 
+
+- Sergiu: Studied LL and wrote code for lm35 using LL, Grafana implementation 
+
+- Vladislav: Studied LL and helped writing code for lm35 using LL, Multiplexer, MOSFET research 
+
+## TODO: 
+
+- Siyuan: Implement correct clock configuration 
+
+- Samuel: Use AIV 
+
+- Sergiu: What we host the project on, make a database for, put some issues in backlog and organize them better on github. 
+
+- Vladislav: MOSFET, Multiplexer for reading temperature 
+
+- Everyone: Start making steps for making a PCB 
+
+## Problems facing: 
+
+- Siyuan: LL and STM32 Clock – either implement re-flow of internal clock and work with external clock 
+
+- Vladislav: MOSFET design 
+
+## Question: 
+
+- Siyuan: What grafana run on (C/python, etc.) -> Sergiu response – the language doesn’t matter 
+
+- How do you send data from microcontroller to grafana 
+
+- There is a script that will do everything for receiving and feeding grafana (using serial) 
+
+ 
