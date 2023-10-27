@@ -4,6 +4,7 @@
         "usart_config.h": "c",
         "modbus_rtu.h": "c",
         "adc.h": "c",
-        "crc.h": "c"
+        "crc.h": "c",
+        "stm32l1xx.h": "c"
     }
 }
