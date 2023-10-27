@@ -6,13 +6,15 @@
 
 /* Modbus RTU client parameters*/
 #define MODBUS_RTU_SLAVE_ADDR_THIS       (uint8_t)0x05
-#define MODBUS_REGISTER_SIZE             20
-#define MODBUS_REGISTER_ADDR_MIN         1
-#define MODBUS_REGISTER_ADDR_MAX         8
+#define MODBUS_REGISTER_SIZE             6
+#define MODBUS_REGISTER_ADDR_MIN         0x00
+#define MODBUS_REGISTER_ADDR_MAX         0x05
 #define MODBUS_BAUD_RATE                 USART_BAUDRATE
 #define MODBUS_FRAME_SILENT_WAIT_TIME_MS (int)(3.5 * 8 / MODBUS_BAUD_RATE)
 #define MODBUS_FRAME_REPLY_LENGTH        7
 #define MODBUS_FRAME_ERROR_REPLY_LENGTH  5
+
+_Atomic uint16_t modbus_registers[MODBUS_REGISTER_SIZE];
 
 /* Modbus RTU data structures */
 typedef enum {
@@ -56,15 +58,16 @@ typedef enum {
     MODBUS_RTU_ERR_BAD_FUNCTION_CODE,
     MODBUS_RTU_ERR_BAD_REGISTER_ADDR,
     MODBUS_RTU_ERR_BAD_CRC,
+    MODBUS_RTU_ERR_INTERNAL_ERROR,
     MODBUS_RTU_ERR_BAD_SLAVE_ADDR = 20,
     MODBUS_RTU_ERR_BAD_FRAME_OVERSIZE,
     MODBUS_RTU_ERR_BAD_FRAME_UNDERSIZE,
     MODBUS_RTU_ERR_NOT_SUPPORTED
 } MODBUS_RTU_ERR;
 
-extern void           debug_console(const char *message);  // user needed to implement
+extern void           debug_console(const char *message);  // user needs to implement
 extern void           modbusRtu_SendData(const uint8_t *const data,
-                                         const size_t         data_length);  // user needed to implement
+                                         const size_t         data_length);  // user needs to implement
 extern MODBUS_RTU_ERR modbusRtu_ReadInputRegister(
     const uint8_t *const modbus_rtu_frame,  // user needed to implement
     uint8_t *reply_data, uint8_t *reply_data_len);

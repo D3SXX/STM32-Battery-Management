@@ -1,6 +1,7 @@
 #include "adc.h"
 
 #include "stm32l1xx.h"
+#include "moc_adc_read.h"
 
 void adc_init(void) {
     // RCC->AHBENR |= (RCC_APB2ENR_ADC1EN);
@@ -28,11 +29,18 @@ uint16_t adc_read(const int pin) {
     return 1024;
 }
 
-void adc_read_current(_Atomic uint16_t* data) { *data = adc_read(PIN_CURRENT); }
-void adc_read_temperature(_Atomic uint16_t* data) { *data = adc_read(PIN_TEMP); }
+void adc_read_current(_Atomic uint16_t* data) { 
+    // *data = adc_read(PIN_CURRENT);
+    *data = moc_adc_read_batt_current();
+}
+void adc_read_temperature(_Atomic uint16_t* data) { 
+    // *data = adc_read(PIN_TEMP); 
+    *data = moc_adc_read_batt_temp();
+}
 void adc_read_volts(_Atomic uint16_t* data) {
     for (int i = 0; i < 4; i++) {
         // mux_set(i + 1);
-        *(data + i) = adc_read(PIN_VOLT);
+        // *(data + i) = adc_read(PIN_VOLT);
+        *(data + i) = moc_adc_read_cell_voltage();
     }
 }

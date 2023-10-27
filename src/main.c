@@ -11,7 +11,7 @@
 
 #define DEBUG_CONSOLE_EN 1
 
-#ifdef DEBUG_CONSOLE_EN> 0
+#if (DEBUG_CONSOLE_EN > 0u)
 #include "stdio.h"
 #endif
 
@@ -46,18 +46,18 @@ void Configure_DebugPin(uint32_t debug_pin) {
 
 void modbus_routine();
 void TIM2_IRQ_handler(void);
+void usart1_rx_dma_frame_oversize_check();
 
 /* Main routine */
 int main(void) {
     __disable_irq();
     SystemClock_Config();
-    init_delay_ms();
     USART1_dma_init();
     USART2_dma_init();
     IWDG_init();
     LED2_init();
     timer2_init();
-    timer2_start(1000);
+    timer2_start(1000, 1000);
     debug_console("App started...\n\r");
     LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_OUTPUT);  // config a debug pin on GPIO
     __enable_irq();
@@ -95,6 +95,7 @@ int main(void) {
 /**
  * \brief   DMA1 channel5 interrupt handler for USART1 RX
  * \author  Siyuan Xu,
+ * \details If modbus request message length is great than 8 bytes
  */
 void usart1_rx_dma_frame_oversize_check(void) {
     if (!dma1_ch5_tc_flag && usart1_rx_dma_buffer[0] != 0) {
@@ -112,8 +113,11 @@ void TIM2_IRQHandler(void) {
     // Handle a timer 'update' interrupt event
     if (TIM2->SR & TIM_SR_UIF) {
         TIM2->SR &= ~(TIM_SR_UIF);
-        subroutine_flag |= ADC_READ_ALL;
+        if (!(subroutine_flag & MODBUS_REQUEST)) {  // prevent reading during modbus request.
+            subroutine_flag |= ADC_READ_ALL;
+        }
     }
+    LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
 }
 
 void modbus_routine(void) {
