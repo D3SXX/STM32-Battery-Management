@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-bool adc_read_cell_voltage(int cell_number, uint16_t* data);
-bool adc_read_batt_current(uint16_t* data);
-bool adc_read_batt_temp(uint16_t* data);
+uint16_t moc_adc_read_cell_voltage(void);
+uint16_t moc_adc_read_batt_current(void);
+uint16_t moc_adc_read_batt_temp(void);
 
 #endif

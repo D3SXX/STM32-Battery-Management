@@ -2,21 +2,23 @@
 
 #include "stm32l1xx.h"
 
-bool adc_read_cell_voltage(int cell_number, uint16_t* data) {
+uint16_t moc_adc_read_cell_voltage(void) {
     srand(SysTick->VAL);                       // Seed the random number generator
     double volt = (double)rand() / RAND_MAX * 2.0 + 2.0;  // random [2.0 - 4.0] volt
-    *data       = (uint16_t)(volt * 10000);    // accuracy in 0.1 milivolt
-    return true;
+    return (uint16_t)(volt * 10000);    // accuracy in 0.1 milivolt.
 }
 
-bool adc_read_batt_current(uint16_t* data) {
+uint16_t moc_adc_read_batt_current(void) {
     srand(SysTick->VAL);                       // Seed the random number generator
     double volt = (double)rand() / RAND_MAX * 10.0;  // random [0.0 - 10.0] Amps
-    *data       = (uint16_t)(volt * 10000);    // accuracy in 0.1 milivolt
-    return true;
+    return (uint16_t)(volt * 10000);    // accuracy in 0.1 milivolt.
 }
-bool adc_read_batt_temp(uint16_t* data)
+
+uint16_t moc_adc_read_batt_temp(void)
 {
-    // bad data
-    return false;
+    srand(SysTick->VAL);                       // Seed the random number generator
+    double temp = ((double)rand() / RAND_MAX - 0.5) * 200.0;  // random [-100.0 - 100.0] Celcius
+    int16_t temp_int = (int)(temp * 10);
+    uint16_t encoded_temp = (uint16_t)temp_int;
+    return encoded_temp;    // accuracy in 0.1 celcius.
 }
