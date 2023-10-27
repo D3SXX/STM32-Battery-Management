@@ -43,3 +43,18 @@ void SystemClock_Config(void) {
 
     LL_SetSystemCoreClock(32000000);
 }
+
+/**
+ * \brief Set clock frequency for SysTick.
+ * \param[in] frequency_hz SysTick frequecy in Hz.
+ * \author siyuan xu, e2101066@edu.vamk.fi, Sep.2023
+ */
+void systick_init(const uint32_t frequency_hz) {
+    SysTick->LOAD =
+        F_CPU / frequency_hz - 1;  // 32 000 000 - 1 = 1s so 32000 - 1 = ms, 32 - 1= 1 us
+    SysTick->VAL = 0;
+    // enable counter, use processor clock, M3 Generic User Guide p. 159
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |  // Set SysTick->CTRL = 0b111;
+                    SysTick_CTRL_TICKINT_Msk | 
+                    SysTick_CTRL_ENABLE_Msk;
+}
