@@ -13,6 +13,6 @@
 #define DBUG_MSG_LEN     128
 
 void delay_ms(const uint32_t delay);
+void delay_ms_random(const uint32_t max);
 void debug_console(const char *message);
-
 #endif /* UTILS_H_ */

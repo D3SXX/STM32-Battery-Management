@@ -52,6 +52,7 @@ void usart1_rx_dma_frame_oversize_check();
 int main(void) {
     __disable_irq();
     SystemClock_Config();
+    systick_init(1000);  // set SysTick frequency to 1000Hz
     USART1_dma_init();
     USART2_dma_init();
     IWDG_init();
@@ -87,7 +88,7 @@ int main(void) {
             DMA1_Channel15_Reload();
             subroutine_flag &= ~DMA1_ERROR;  // Reset DMA1_ERROR
         }
-        delay_ms(1000);
+        // delay_ms(1000);
         // LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
     }
 }
@@ -106,7 +107,7 @@ void usart1_rx_dma_frame_oversize_check(void) {
 /* Interrupt handlers here */
 void SysTick_Handler(void) {
     // Debug PIN PA8
-    LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_8);
+    // LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_8);
 }
 
 void TIM2_IRQHandler(void) {
