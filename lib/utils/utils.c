@@ -6,10 +6,11 @@
  */
 #include "utils.h"
 
+#include <stdlib.h>
+
 #include "stm32l1xx.h"
 #include "sysclock_config.h"
 #include "usart_config.h"
-
 /**
  * \brief Delay in miliseconds.
  * \param[in] delay Delay time in miliseconds.
@@ -18,7 +19,7 @@
 void delay_ms(const uint32_t delay) {
     uint32_t i = 0;
 
-    systick_init(1000);  // set SysTick frequency to 1000Hz
+    // systick_init(1000);  // set SysTick frequency to 1000Hz
 
     while (i < delay) {
         // CTRL register bit 16  returns 1 if timer counted to 0 since last time this was read.
@@ -27,6 +28,16 @@ void delay_ms(const uint32_t delay) {
         }  // M3 Generic User Guide p. 159
         i++;
     }
+}
+
+/**
+ * \brief Random delay in miliseconds.
+ * \param[in] max maximum delay range in miliseconds.
+ * \author siyuan xu, e2101066@edu.vamk.fi, Oct.2023
+ */
+void delay_ms_random(const uint32_t max) {
+    srand(SysTick->VAL);                       // Seed the random number generator
+    uint32_t delay = (rand() / RAND_MAX) * max;  // random [0 - max] ms
 }
 
 /**
