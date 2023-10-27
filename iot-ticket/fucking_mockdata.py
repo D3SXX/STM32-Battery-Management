@@ -7,10 +7,11 @@ from iotticket.models import deviceattribute
 from iotticket.models import datanodesvalue
 from iotticket.client import Client
 import minimalmodbus
+import numpy as np
 
 #main
 # modbus_read fuction code 04 is added
-def modbus_read_c1_voltage():
+def modbus_read_input_register(register_addr):
     # Define the serial port and communication parameters
     SERIAL_PORT = 'com6'  # Adjust this to your serial port
     SLAVE_ADDRESS = 5  # Adjust this to your specific Modbus device's address
@@ -23,19 +24,19 @@ def modbus_read_c1_voltage():
 
     try:
         # Read a holding register (e.g., register address 0x0001)
-        register_value = instrument.read_register(0x0001, functioncode=4)
+        register_value = instrument.read_register(register_addr, functioncode=4)
         # Print the value
-        print(f"Value at register 0x0001: {register_value}")
+        print(f"Value at register {register_addr}: {register_value}")
     except Exception as e:
         print(f"Error: {str(e)}")
     finally:
         # Close the serial connection
         instrument.serial.close()
     
-    return register_value / 10000   #convert register value into volt
+    return register_value
 
 
-data = json.load(open("config.json"))
+data = json.load(open("iot-ticket\Config.json"))
 username = data["username"]
 password = data["password"]
 deviceId = data["deviceId"]
@@ -65,32 +66,52 @@ voltage_data_collection.append(cell_4_voltage)
 while True:
     # write datanode demo
     # some mock data here
+    startRegisterAddress = 0
     for voltageData in voltage_data_collection:
-        if voltageData.name == "cell1_voltage":
-            voltageData.set_value(modbus_read_c1_voltage())
-            voltageData.set_timestamp(int(round(time.time() * 1000)))
-        else:
-            voltageData.set_value(voltage)
-            voltageData.set_timestamp(int(round(time.time() * 1000)))
+        voltage = modbus_read_input_register(startRegisterAddress)/1000
+        voltageData.set_value(voltage)
+        voltageData.set_timestamp(int(round(time.time() * 1000)))
+        startRegisterAddress = startRegisterAddress + 1
+        print(f"{voltageData.name}: {voltageData.v} {voltageData.unit}")
+        # if voltageData.name == "cell1_voltage":
+        #     voltageData.set_value(modbus_read_voltage())
+        #     voltageData.set_timestamp(int(round(time.time() * 1000)))
+        # else:
+        #     voltageData.set_value(voltage)
+        #     voltageData.set_timestamp(int(round(time.time() * 1000)))
+    # battery_current.set_value(current)
+    # battery_current.set_timestamp(int(round(time.time() * 1000)))
+    # battery_temp.set_value(temperature)
+    # battery_temp.set_timestamp(int(round(time.time() * 1000)))
+
+    current = modbus_read_input_register(startRegisterAddress)/1000
     battery_current.set_value(current)
     battery_current.set_timestamp(int(round(time.time() * 1000)))
-    battery_temp.set_value(temperature)
+    startRegisterAddress = startRegisterAddress + 1
+    print(f"{battery_current.name}: {battery_current.v} {battery_current.unit}")
+
+    temperature_uint16 = modbus_read_input_register(startRegisterAddress)
+    temperature_int16 = np.int16(temperature_uint16)
+    temperature_double = temperature_int16 / 10
+
+    battery_temp.set_value(temperature_double)
     battery_temp.set_timestamp(int(round(time.time() * 1000)))
+    print(f"{battery_temp.name}: {battery_temp.v} {battery_temp.unit}")
+    # iotDataCollection = voltage_data_collection.copy()
+    # iotDataCollection.append(battery_current)
+    # iotDataCollection.append(battery_temp)
+    
+    print(iotClient.writedata(deviceId, *voltage_data_collection))
+    print(iotClient.writedata(deviceId, battery_current))
+    print(iotClient.writedata(deviceId, battery_temp))
+    
+    # voltage += 0.1
+    # current += 1
+    # temperature += 5
 
-    iotDataCollection = voltage_data_collection
-    iotDataCollection.append(battery_current)
-    iotDataCollection.append(battery_temp)
-    
-    
-    print(iotClient.writedata(deviceId, *iotDataCollection))
-    
-    voltage += 0.1
-    current += 1
-    temperature += 5
-
-    voltage = 2.7 if voltage >= 3.9 else voltage
-    current = 2.5 if current >= 40 else current
-    temperature = -20.5 if temperature >= 50 else temperature
+    # voltage = 2.7 if voltage >= 3.9 else voltage
+    # current = 2.5 if current >= 40 else current
+    # temperature = -20.5 if temperature >= 50 else temperature
 
     print("sleeping 3s...")
     time.sleep(3)
