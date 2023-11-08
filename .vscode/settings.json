@@ -7,5 +7,6 @@
         "crc.h": "c",
         "stm32l1xx.h": "c",
         "sysclock_config.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
