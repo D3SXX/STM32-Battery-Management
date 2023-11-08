@@ -21,4 +21,4 @@ jobs:
         run: pip install --upgrade platformio
 
       - name: Test PlatformIO Project
-        run: platformio test --environment native 
+        run: platformio test --environment native -vvv 
