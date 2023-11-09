@@ -11,7 +11,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define F_CPU                     32000000UL
 #define USART_BAUDRATE            115200U
 #define USART_BRR_VAL             (uint32_t)(F_CPU / USART_BAUDRATE)
 #define USART1_RX_DMA_BUFFER_SIZE 8
@@ -26,6 +25,7 @@ void USART1_RX_DMA_Buffer_Reset();
 void DMA1_Channel15_Reload(void);
 void rs485_send_data(const uint8_t* data, const size_t len);
 
+void USART2_init(void);
 void USART2_dma_init(void);
 char USART2_read(void);
 void USART2_write(char data);
