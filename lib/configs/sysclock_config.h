@@ -9,5 +9,6 @@
 #define SYSCLOCK_CONFIG_H_
 #include "stm32l1xx.h"
 void SystemClock_Config(void);
+void SystemClock_HSI_Config(void);
 void systick_init(const uint32_t frequency_hz);
 #endif /* SYSCLOCK_CONFIG_H_ */

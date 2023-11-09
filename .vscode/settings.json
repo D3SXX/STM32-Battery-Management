@@ -6,6 +6,10 @@
         "adc.h": "c",
         "crc.h": "c",
         "stm32l1xx.h": "c",
-        "sysclock_config.h": "c"
-    }
+        "sysclock_config.h": "c",
+        "utils.h": "c",
+        "unity_config.h": "c",
+        "stm32l1xx_hal.h": "c"
+    },
+    "cmake.configureOnOpen": false
 }

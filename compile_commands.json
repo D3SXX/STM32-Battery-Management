@@ -1,0 +1,134 @@
+[
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib3f8\\moc\\moc_adc_read.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\moc -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\moc\\moc_adc_read.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\moc\\moc_adc_read.c",
+        "output": ".pio\\build\\native\\lib3f8\\moc\\moc_adc_read.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libd92\\adc\\adc.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\adc -Ilib\\moc -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\adc\\adc.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\adc\\adc.c",
+        "output": ".pio\\build\\native\\libd92\\adc\\adc.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_adc.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_adc.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_adc.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_adc.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_dma.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_dma.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_dma.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_dma.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_exti.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_exti.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_exti.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_exti.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_gpio.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_gpio.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_gpio.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_gpio.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_pwr.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_pwr.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_pwr.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_pwr.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_rcc.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_rcc.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_rcc.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_rcc.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_usart.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_usart.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_usart.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_usart.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_utils.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_utils.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\STM32L1xx_LL_Driver\\src\\stm32l1xx_ll_utils.c",
+        "output": ".pio\\build\\native\\libdb6\\STM32L1xx_LL_Driver\\stm32l1xx_ll_utils.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib66e\\utils\\utils.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\utils\\utils.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\utils\\utils.c",
+        "output": ".pio\\build\\native\\lib66e\\utils\\utils.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib068\\configs\\iwdg.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\configs\\iwdg.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\iwdg.c",
+        "output": ".pio\\build\\native\\lib068\\configs\\iwdg.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\as.exe -o .pio\\build\\native\\lib068\\configs\\startup_stm32l152xe.o lib\\configs\\startup_stm32l152xe.s",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\startup_stm32l152xe.s",
+        "output": ".pio\\build\\native\\lib068\\configs\\startup_stm32l152xe.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\as.exe -o .pio\\build\\native\\lib068\\configs\\startup_stm32l152xe.o lib\\configs\\startup_stm32l152xe.s",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\startup_stm32l152xe.s",
+        "output": ".pio\\build\\native\\lib068\\configs\\startup_stm32l152xe.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib068\\configs\\sysclock_config.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\configs\\sysclock_config.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\sysclock_config.c",
+        "output": ".pio\\build\\native\\lib068\\configs\\sysclock_config.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib068\\configs\\system_stm32l1xx.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\configs\\system_stm32l1xx.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\system_stm32l1xx.c",
+        "output": ".pio\\build\\native\\lib068\\configs\\system_stm32l1xx.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib068\\configs\\timer.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\configs\\timer.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\timer.c",
+        "output": ".pio\\build\\native\\lib068\\configs\\timer.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib068\\configs\\usart_config.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\configs\\usart_config.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\configs\\usart_config.c",
+        "output": ".pio\\build\\native\\lib068\\configs\\usart_config.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\libb31\\crc\\crc.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\crc lib\\crc\\crc.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\crc\\crc.c",
+        "output": ".pio\\build\\native\\libb31\\crc\\crc.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib3e9\\modbus\\modbus_rtu.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\modbus -Ilib\\crc -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\modbus\\modbus_rtu.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\modbus\\modbus_rtu.c",
+        "output": ".pio\\build\\native\\lib3e9\\modbus\\modbus_rtu.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\lib3e9\\modbus\\modbus_rtu_func_4.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Ilib\\modbus -Ilib\\crc -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS lib\\modbus\\modbus_rtu_func_4.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "lib\\modbus\\modbus_rtu_func_4.c",
+        "output": ".pio\\build\\native\\lib3e9\\modbus\\modbus_rtu_func_4.o"
+    },
+    {
+        "command": "C:\\msys64\\mingw64\\bin\\gcc.exe -o .pio\\build\\native\\src\\main.o -c -DPLATFORMIO=60111 -DSTM32L152xE -DF_CPU=32000000L -Iinclude -Isrc -Ilib\\modbus -Ilib\\crc -Ilib\\utils -Ilib\\configs -Ilib\\STM32L1xx_LL_Driver\\src -Ilib\\adc -Ilib\\moc -Ilib\\STM32L1xx -Ilib\\CMSIS\\include -Ilib\\CMSIS src\\main.c",
+        "directory": "C:\\Users\\siyxu\\Documents\\vamk\\EmbeddedSystemProject\\STM32-Battery-Management",
+        "file": "src\\main.c",
+        "output": ".pio\\build\\native\\src\\main.o"
+    }
+]

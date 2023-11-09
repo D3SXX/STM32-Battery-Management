@@ -5,12 +5,10 @@
  *      Author: Siyuan Xu
  */
 #include "utils.h"
-
+#include "usart_config.h"
 #include <stdlib.h>
 
 #include "stm32l1xx.h"
-#include "sysclock_config.h"
-#include "usart_config.h"
 /**
  * \brief Delay in miliseconds.
  * \param[in] delay Delay time in miliseconds.
@@ -38,6 +36,7 @@ void delay_ms(const uint32_t delay) {
 void delay_ms_random(const uint32_t max) {
     srand(SysTick->VAL);                       // Seed the random number generator
     uint32_t delay = (rand() / RAND_MAX) * max;  // random [0 - max] ms
+    delay_ms(delay);
 }
 
 /**
