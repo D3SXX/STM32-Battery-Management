@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "CRC.h"
+#include "crc.h"
 #include "utils.h"
 
 /**
