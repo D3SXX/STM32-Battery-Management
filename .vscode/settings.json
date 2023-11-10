@@ -8,7 +8,11 @@
         "stm32l1xx.h": "c",
         "sysclock_config.h": "c",
         "stdint.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "modbus_rtu_func_4.h": "c",
+        "stm32l1xx_ll_driver.h": "c",
+        "stm32l1xx_ll_rcc.h": "c"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }

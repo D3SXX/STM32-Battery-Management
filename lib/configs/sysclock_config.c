@@ -1,6 +1,7 @@
 #include "sysclock_config.h"
 
 //#include "..\STM32L1xx_LL_Driver\src\STM32L1xx_LL_Driver.h"
+//Header files can't contain capital letters!
 #include "stm32l1xx_ll_driver.h"
 /*
  * sysclock_config.c
