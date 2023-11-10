@@ -1,6 +1,6 @@
+#include "STM32L1xx_LL_Driver.h"
 #include "adc.h"
 #include "iwdg.h"
-#include "STM32L1xx_LL_Driver.h"
 #include "modbus_rtu.h"
 #include "modbus_rtu_func_4.h"
 #include "stdbool.h"
@@ -29,7 +29,9 @@ bool     dma1_ch5_tc_flag = false;  // DMA1 ch5 Transmite complete flag
 
 /* Private variables */
 uint8_t usart1_rx_dma_buffer[USART1_RX_DMA_BUFFER_SIZE];
+#if (DEBUG_CONSOLE_EN > 0u)
 uint8_t usart2_rx_dma_buffer[USART2_RX_DMA_BUFFER_SIZE];
+#endif
 
 /* Private function prototypes  */
 static inline void LED2_init(void) {
@@ -52,13 +54,17 @@ int main(void) {
     SystemClock_Config();
     systick_init(1000);  // set SysTick frequency to 1000Hz
     USART1_dma_init();
+#if (DEBUG_CONSOLE_EN > 0u)
     USART2_dma_init();
+#endif
     IWDG_init();
     LED2_init();
     timer2_init();
     timer2_start(1000, 1000);
-    debug_console("App started...\n\r");
     LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_OUTPUT);  // config a debug pin on GPIO
+#if (DEBUG_CONSOLE_EN > 0u)
+    debug_console("App started...\n\r");
+#endif
     __enable_irq();
 
     while (1) {
