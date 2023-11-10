@@ -10,8 +10,8 @@
  * \return modbus_rtu_t type struct
  * \author siyuan xu, e2101066@edu.vamk.fi, Jan.2023
  */
-modbus_rtu_t modbus_rtu_create(void) {
-    modbus_rtu_t modbus_rtu_object = {0, 0, 0, 0, 0};
+modbus_rtu_rqst_t modbus_rtu_create(void) {
+    modbus_rtu_rqst_t modbus_rtu_object = {0, 0, 0, 0, 0};
     return modbus_rtu_object;
 }
 
@@ -20,19 +20,20 @@ modbus_rtu_t modbus_rtu_create(void) {
  * \param[in] modbus_rtu_frame - Address + PDU + CRC, PDU = Function code + Data
  * \author siyuan xu, e2101066@edu.vamk.fi, Jan.2023
  */
-void modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
+MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
     MODBUS_RTU_ERR err;
-    uint8_t        reply_data[8];
+    uint8_t        reply_data[8]  = 0;
     uint8_t        reply_data_len = 0;
 
+    // Validate CRC checksum
     err = modbusRtu_CrcCheck(modbus_rtu_frame);
-    if (err == MODBUS_RTU_ERR_BAD_CRC) {
+    if (err != MODBUS_RTU_ERR_SUCCESS) {
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("BAD CRC!\n\r");
 #endif
         modbusRtu_ErrorReply(modbus_rtu_frame, (uint8_t)err);
-        return;
-    } else if (err == MODBUS_RTU_ERR_SUCCESS) {
+        return err;
+    } else {
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("CRC SUCCESS!\n\r");
 #endif
@@ -43,20 +44,23 @@ void modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
             debug_console("BAD FUNCTION CODE!\n\r");
 #endif
             modbusRtu_ErrorReply(modbus_rtu_frame, (uint8_t)err);
-            return;
+            return err;
         } else {
 #if (DEBUG_CONSOLE_EN > 0u)
             debug_console("FUNCTION CODE Accepted!\n\r");
 #endif
             switch (modbus_rtu_frame[FUNCTION_CODE]) {
                 case READ_DO:
-                    // TBD
+                    // Not supported
+                    err = MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
                     break;
                 case READ_DI:
-                    // TBD
+                    // Not supported
+                    err = MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
                     break;
                 case READ_AO:
-                    // TBD
+                    // Not supported
+                    err = MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
                     break;
                 case READ_AI:
                     // TBD
@@ -64,10 +68,12 @@ void modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
                         modbusRtu_ReadInputRegister(modbus_rtu_frame, reply_data, &reply_data_len);
                     break;
                 case WRITE_ONE_DO:
-                    // TBD
+                    // Not supported
+                    err = MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
                     break;
                 case WRITE_ONE_AO:
-                    // TBD
+                    // Not supported
+                    err = MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
                     break;
                 default:
                     break;
@@ -118,6 +124,25 @@ void modbusRtu_ErrorReply(const uint8_t *const modbus_rtu_frame,
         (uint8_t)(crc >> 8);  // crc_hi  -> reply_frame_crc[1]
     modbusRtu_SendData(modbus_reply_frame, MODBUS_FRAME_ERROR_REPLY_LENGTH);
 }
+
+/**
+ * \brief Free the dynamic allocated memory
+ * \param[in] modbus_rtu_rqst The address of modbus request object.
+ * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
+ */
+uint8_t *modbusRtu_CreateReplyFrame(const modbus_rtu_rqst_t *const modbus_rtu_rqst) {
+    // addr(1B) + f_code(1B) + byte_cnt(1B) + CRC(2B) = 5 bytes
+    // the rest = reg_qty(2B) * 2
+    int reply_frame_len = 5 + modbus_rtu_rqst->RegisterQuantity * 2;
+    uint8_t reply_frame = (uint8_t*)calloc(reply_frame_len, sizeof(uint8_t));
+}
+
+/**
+ * \brief Free the dynamic allocated memory
+ * \param[in] modbus_rtu_reply The address of modbus replay or error reply frame.
+ * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
+ */
+void modbusRtu_FreeReplyFrame(uint8_t *modbus_rtu_reply) { free(modbus_rtu_reply); }
 
 /**
  * \brief Normal reply to Modbus RTU Master
@@ -182,7 +207,7 @@ MODBUS_RTU_ERR modbusRtu_CrcCheck(const uint8_t *const modbus_rtu_frame) {
  */
 MODBUS_RTU_ERR modbusRtu_FunctionCodeValidation(const uint8_t function_code) {
     if ((function_code < READ_DO) || (function_code > WRITE_ONE_AO)) {
-        return MODBUS_RTU_ERR_BAD_FUNCTION_CODE;
+        return MODBUS_RTU_ERR_ILLEGAL_FUNCTION;
     } else {
         return MODBUS_RTU_ERR_SUCCESS;
     }
@@ -194,10 +219,15 @@ MODBUS_RTU_ERR modbusRtu_FunctionCodeValidation(const uint8_t function_code) {
  * \return MODBUS_RTU_SUCCESS when success, MODBUS_RTU_ERR_BAD_REGISTER_ADDR when failed
  * \author siyuan xu, e2101066@edu.vamk.fi, Jan.2023
  */
-MODBUS_RTU_ERR modbusRtu_RegisterAddressValidation(const uint16_t reg_addr) {
+MODBUS_RTU_ERR modbusRtu_RegisterAddressValidation(const uint16_t reg_addr,
+                                                   const uint16_t reg_qty) {
     if ((reg_addr < MODBUS_REGISTER_ADDR_MIN) || (reg_addr > MODBUS_REGISTER_ADDR_MAX)) {
-        return MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
+        return MODBUS_RTU_ERR_ILLEGAL_DATA_ADDR;
     } else {
-        return MODBUS_RTU_ERR_SUCCESS;
+        if (reg_addr + (reg_qty - 1) * 2 > MODBUS_REGISTER_ADDR_MAX) {
+            return MODBUS_RTU_ERR_ILLEGAL_DATA_VALUE;
+        } else {
+            return MODBUS_RTU_ERR_SUCCESS;
+        }
     }
 }
