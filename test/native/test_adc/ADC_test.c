@@ -1,5 +1,8 @@
 #include <unity.h>
-
+#include <stdbool.h>
+#include <string.h>
+#define UNITY_INCLUDE_PRINT_FORMATTED
+#define size 10
 void setUp(void) {
     // set stuff up here
 }
@@ -13,9 +16,9 @@ int arr[5]={4095, 3500, 3200, 3700, 3900};
 int median;
 	int apu;
 		/*Sort array and get medium value*/
-		for(int k=0;k<len;k++)
+		for(int k=0;k<5;k++)
 			{
-				for(int i=0;i<len;i++)
+				for(int i=0;i<4;i++)
 				{
 					if(arr[i]>arr[i+1])
 					{
@@ -25,15 +28,15 @@ int median;
 					}
 				}
 			}	
-    if (len % 2 == 0)
+    if (5 % 2 == 0)
     {
         /*If the length is even, return the average of the two middle values*/
-        median =  (arr[len / 2 - 1] + arr[len / 2]) / 2;
+        median =  (arr[5 / 2 - 1] + arr[5 / 2]) / 2;
     }
     else
     {
         /*If the length is odd, return the middle value*/
-        median =  arr[len / 2];
+        median =  arr[5 / 2];
 	}
     TEST_ASSERT_EQUAL(3700, median);
     
@@ -41,32 +44,36 @@ int median;
 
 
 void adc_edge(){
-int adc[7] = [3100, 3300, 3400, 3700, 3800, 3900, 4000];
+int adc[7] = {3103, 3300, 3400, 3700, 3800, 3900, 4000};
 bool check[7];
 for ( int chan = 0; chan < 7; ++chan)
 {
     switch(chan){
+        case 0:
         case 1:
         case 2:
         case 3: 
+            if (adc[chan] < 3102){check[chan] =  false;}else{check[chan] =  true;}  // checking if battery cell voltage < 2.5V
+        break;
         case 4:
-            if (adc[chan] < 3102){check =  false;}else{check =  true;}  // checking if battery cell voltage < 2.5V
+        check[chan] =  true;
         break;
         case 5:
-        return true;
-        case 6:
-            if(adc[chan] > 1861){check =  false;}else{check =  true;} // checking if lm35 voltage > 1.5V
+            if(adc[chan] > 1861){check[chan] =  false;}else{check[chan] =  true;} // checking if lm35 voltage > 1.5V
+            break;
         default:
-            check =  true;
+            check[chan] =  true;
     }
 }
 
-for ( int i = 0; i < 6; ++i)
+
+for ( int i = 0; i < 5; i++)
     {
         TEST_ASSERT_TRUE(check[i]);
     }
-    TEST_ASSERT_FALSE(check[6]);
-    TEST_ASSERT_TRUE(check[7]);
+    TEST_ASSERT_FALSE(check[5]);
+    TEST_ASSERT_TRUE(check[6]);
+
 }
 /*
 void mux_read (){
@@ -144,15 +151,30 @@ default: // 0 0 0
 	if (*chan-1 == 1 && *data > 1861) return false; // We check if channel 1 has voltage over 1.5 Volts
 
 }
-
-void adc_to_volts(const uint16_t adc, const uint16_t chan){
+*/
+void voltconversion(){
+    //adc read volt conversion
+    //mock data
+    bool check[size];
+    float voltage[size];
+    int adc[size] = {3000,3150, 3200, 3300, 3500, 3750, 4000, 4090, 4092, 4095}; //ADC values inbetween 2.5v and 3.3V
+    for (int8_t i = 0; i < size; i++)
+    {
+        check[i]=true;
+	    voltage[i] = adc[i] * (3.3/4095); // Calculate voltage
+        if(voltage[i]<1.5){check[i] = false;} //lower limit for ADC
+        if(voltage[i]>3.3){check[i] = false;} //upper liit for ADC
+        TEST_ASSERT(check[i]);
+    }
+      
 
 }
-*/
-int main(int argc, char **argv) {
+
+int main() {
     UNITY_BEGIN();
     RUN_TEST(find_median);
     RUN_TEST(adc_edge);
+    RUN_TEST(voltconversion);
     UNITY_END();
 }
 
