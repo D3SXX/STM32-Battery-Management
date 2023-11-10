@@ -26,17 +26,17 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
                                            uint8_t *reply_data, uint8_t *reply_data_len) {
     uint16_t register_addr = ((uint16_t)modbus_rtu_frame[START_ADDRESS_HI] << 8) |
                              (uint16_t)modbus_rtu_frame[START_ADDRESS_LOW];
-    //register_quantity not supprted in this project
-    // uint16_t register_quantity = ((uint16_t)modbus_rtu_frame[REG_QUANTITY_HI] << 8) |
-    //                              (uint16_t)modbus_rtu_frame[REG_QUANTITY_LOW];
+    //register_quantity not fully supprted in this project
+    uint16_t register_quantity = ((uint16_t)modbus_rtu_frame[REG_QUANTITY_HI] << 8) |
+                                 (uint16_t)modbus_rtu_frame[REG_QUANTITY_LOW];
     MODBUS_RTU_ERR err;
     uint16_t       data;
 #if (DEBUG_CONSOLE_EN > 0u)
     char debug_msg[100];
 #endif
-    err = modbusRtu_RegisterAddressValidation(register_addr);
+    err = modbusRtu_RegisterAddressValidation(register_addr, register_quantity);
     if (err != MODBUS_RTU_ERR_SUCCESS) {
-        return MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
+        return err;
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("BAD REGISTER ADDR.");
 #endif
@@ -55,7 +55,7 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
                 //                 } else {
                 //                     reply_data[0]   = (uint8_t)(data >> 8);
                 //                     reply_data[1]   = (uint8_t)(data & 0xff);
-                //                     *reply_data_len = 2;
+                //                     *reply_data_len = register_quantity * 2;
                 //                     err             = MODBUS_RTU_ERR_SUCCESS;
                 //                 }
 
@@ -88,13 +88,13 @@ MODBUS_RTU_ERR modbusRtu_ReadInputRegister(const uint8_t *const modbus_rtu_frame
                 break;
             default:
                 // Register is out of range
-                err = MODBUS_RTU_ERR_BAD_REGISTER_ADDR;
+                err = MODBUS_RTU_ERR_ILLEGAL_DATA_ADDR;
                 return err;
                 break;
         }
         reply_data[0]   = (uint8_t)(data >> 8);
         reply_data[1]   = (uint8_t)(data & 0xff);
-        *reply_data_len = 2;
+        *reply_data_len = register_quantity * 2;
     }
     return err;
 }
