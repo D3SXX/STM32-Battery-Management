@@ -1,6 +1,6 @@
 #ifndef MODBUS_RTU_FUNC_4_H
 #define MODBUS_RTU_FUNC_4_H
-#include "modbus_rtu.h"
+#include "modbus_rtu_types.h"
 
 typedef enum {
     REG_ADDR_CELL1_VOLT = 0,
