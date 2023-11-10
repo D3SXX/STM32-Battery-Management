@@ -13,6 +13,8 @@ u_int16_t find_median(int arr[],int len);
 
 bool mux_read (int *chan, uint32_t C,uint32_t B,uint32_t A, int *data);
 
-uint16_t adc_to_volts(const uint16_t adc, const uint16_t chan);
+uint16_t adc_to_volts(const uint16_t adc);
+
+bool adc_edge(const uint16_t adc, const uint16_t chan);
 
 #endif

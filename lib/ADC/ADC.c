@@ -1,14 +1,9 @@
-/*Authors : Vladislav R., Date : 25.10.2023 
+/*Authors : Vladislav R., Date : 10.11.2023 
 Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
-
-This code here showcases: 
-
-
+Made for unit testing
 */
 
 #include "ADC.h"
-
-
 
 // We are testing 3 cases here
 // First test - testing ADC conversion to the actual volts
@@ -61,10 +56,16 @@ bool adc_edge(const uint16_t adc, const uint16_t chan){
         case 2:
         case 3:
         case 4:
-            if (adc < 3102){return false;}else{return true;}  // checking if temperature < 2.5V
+            if (adc < 3102){return false;}else{return true;}  // checking if battery cell voltage < 2.5V
         break;
+        case 5:
+        return true;
+        case 6:
+            if(adc > 1861){return false;}else{return true;} // checking if lm35 voltage > 1.5V
+        default:
+            return true;
     }
-    
+
 }
 
 bool mux_read (int *chan, uint32_t C,uint32_t B,uint32_t A, int *data){ // Possibly need to change A and C  
@@ -122,20 +123,16 @@ default: // 0 0 0
     mux_state[2] = false;
     break;
 }
-	LL_mDelay(5); // We have to wait for a switch (about 1 ms measured with oscilloscope), otherwise we get garbage values
-	/*Read channels read_times times*/
-	adc_a0_config(); // Configure ADC only once when starting the readings
+
 	for(int k=0;k<read_times-1;k++)
 	{
-			adc_values[k] = read_adc_A0(); // Read A0 and record its output to an array
-			LL_mDelay(1); // 1 ms delay for each reading
+		adc_values[k] = read_adc_A0(); // Read A0 and record its output to an array
 	}
 	*data = find_median(adc_values,read_times);
 
 	if(*chan <= 7)
 		(*chan)++;
 	/*Example of implementing False*/
-	if (*chan-1 == 1 && *data > 1861) return false; // We check if channel 1 has voltage over 1.5 Volts
-
-    return true;
+	if (adc_edge(*data, chan)) return true;
+    return false;
 }
