@@ -22,7 +22,7 @@ modbus_rtu_rqst_t modbus_rtu_create(void) {
  */
 MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
     MODBUS_RTU_ERR err;
-    uint8_t        reply_data[8]  = 0;
+    uint8_t        reply_data[8] = {0};
     uint8_t        reply_data_len = 0;
 
     // Validate CRC checksum
