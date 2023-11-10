@@ -9,8 +9,6 @@
 #include "usart_config.h"
 #include "utils.h"
 
-#define DEBUG_CONSOLE_EN 1
-
 #if (DEBUG_CONSOLE_EN > 0u)
 #include "stdio.h"
 #endif
