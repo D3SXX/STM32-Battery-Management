@@ -45,6 +45,7 @@ typedef enum {
     WRITE_ONE_AO
 } MODBUS_FUNCTION_CODE;
 
+#pragma pack(1) 
 typedef struct modbus_rtu_type {
     uint8_t  SlaveAddress;
     uint8_t  FunctionCode;
