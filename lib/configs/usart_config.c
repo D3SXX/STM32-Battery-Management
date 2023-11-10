@@ -170,7 +170,7 @@ void rs485_send_data(const uint8_t *data, const size_t len) {
     }
     while (!(USART1->SR & USART_SR_TC)) {
     }             /*!< Transmission Complete */
-    delay_ms(3);  // measured with oscilloscope
+    // delay_ms(3);  // No need anymore
     RS485_TX_Disable();
 }
 
