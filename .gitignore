@@ -5,3 +5,6 @@
 .vscode/ipch
 docs/KiCAD Files/MosfetPowerControl/MosfetPowerControl-backups/
 iot-ticket/iotticket/__pycache__/
+docs/KiCAD Files/MultiCellVoltMeter/MultiCellVoltMeter/MultiCellVoltMeter-backups/
+docs/KiCAD Files/ShuntCurrentMeter/ShuntCurrentMeter/ShuntCurrentMeter-backups/
+docs/KiCAD Files/Mux/Mux/Mux-backups/

@@ -1,0 +1,9 @@
+* A quad opamp ngspice model
+* file name: lm324-quad.lib
+.subckt LM324-QUAD 1out 1in- 1in+ vcc+ 2in+ 2in- 2out 3out 3in- 3in+ vcc- 4in+ 4in- 4out
+.include lm324.lib
+XU1A 1in+ 1in- vcc+ vcc- 1out LM324/5_1/TI
+XU1B 2in+ 2in- vcc+ vcc- 2out LM324/5_1/TI
+XU1C 3in+ 3in- vcc+ vcc- 3out LM324/5_1/TI
+XU1D 4in+ 4in- vcc+ vcc- 4out LM324/5_1/TI
+.ends
