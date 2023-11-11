@@ -1,0 +1,38 @@
+Report 08.11.2023
+
+Host - Siyuan
+Participants - Vladislav, Samuel, Sergiu
+
+Group Progress:
+
+Siyuan: LM324 QUAD modelling in NGSpice,
+MultiCellVoltMeter Schema simulation + PCB on kicad,
+ShuntCurrentSensor Schema simulation + PCB on kicad,
+Mux module         Schema simulation + PCB on kicad,
+PlatformIO Unit Test setup for Native (test without the hardware)
+
+Samuel: Protyping the shunt current sensor on copperboard
+
+Vladislav: Sweden!!!
+
+Sergiu: Tried PCB design, Sweden
+
+Block:
+
+Siyuan: Where is the time?
+
+Samuel: Waiting for PCB design, waiting for Mosfet PCB arrive
+
+Vladislav: Learning new stuff
+
+Sergiu: Time management
+
+TODO:
+Siyuan - PCBs, embedded Testing,
+Organize the project directory according to PlatformIO for easier Testing.
+
+Samuel: Make PCBs
+
+Vladislav: CI for github, help with making PCB
+
+Sergiu: Unit Test, soldering the PCB, joule Heating formula
