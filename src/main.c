@@ -52,7 +52,6 @@ void read_cell_voltage_routine(void);
 void TIM2_IRQ_handler(void);
 void usart1_rx_dma_frame_oversize_check();
 
-
 /* Main routine */
 int main(void) {
     __disable_irq();
@@ -152,7 +151,8 @@ void modbus_routine(void) {
 
 void read_current_routine(void) {
     mux_set(MUX_SEL_CH4);
-    uint16_t current                        = adc_convert_batt_current(adc_read);
+    uint16_t adc_value                      = adc_read(ADC_INPUT_BATT_CURRENT);
+    uint16_t current                        = adc_convert_batt_current(adc_value);
     modbus_registers[REG_ADDR_BATT_CURRENT] = current;
     if (current == 0) {
         // There is no discharging current sensing yet in this project. Turn mosfet control to fully
@@ -190,7 +190,7 @@ void read_cell_voltage_routine(void) {
     if (voltage <= 2600) {
         // stm32_sleep();
         // Wakeup by ADC, Timer?
-    } 
+    }
     if (voltage >= 3330) {
         // mosfet_control(MOSFET_SHUT_DOWN);
     }

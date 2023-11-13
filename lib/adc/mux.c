@@ -14,5 +14,4 @@ void mux_init() {
 
 void mux_set(const uint16_t mux_channel) {
     GPIOB->ODR = mux_channel;
-    delay_ms(1);
 }
