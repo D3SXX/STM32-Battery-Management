@@ -18,13 +18,13 @@
 #define ODR_MUX_C           GPIO_ODR_ODR_4  // PB4 (D5)
 
 #define MUX_SEL_CH0         0x00U
-#define MUX_SEL_CH1         (0x01U << ODR_MUX_A)
-#define MUX_SEL_CH2         (0x01U << ODR_MUX_B)
-#define MUX_SEL_CH3         ((0x01U << ODR_MUX_A) | (0x01U << ODR_MUX_B))
-#define MUX_SEL_CH4         (0x01U << ODR_MUX_C)
-#define MUX_SEL_CH5         ((0x01U << ODR_MUX_A) | (0x01U << ODR_MUX_C))
-#define MUX_SEL_CH6         ((0x01U << ODR_MUX_B) | (0x01U << ODR_MUX_C))
-#define MUX_SEL_CH7         ((0x01U << ODR_MUX_A) | (0x01U << ODR_MUX_B) | (0x01U << ODR_MUX_C))
+#define MUX_SEL_CH1         (ODR_MUX_A)
+#define MUX_SEL_CH2         (ODR_MUX_B)
+#define MUX_SEL_CH3         (ODR_MUX_A | ODR_MUX_B)
+#define MUX_SEL_CH4         (ODR_MUX_C)
+#define MUX_SEL_CH5         (ODR_MUX_A | ODR_MUX_C)
+#define MUX_SEL_CH6         (ODR_MUX_B | ODR_MUX_C)
+#define MUX_SEL_CH7         (ODR_MUX_A | ODR_MUX_B | ODR_MUX_C)
 
 void mux_init(void);
 void mux_set(const uint16_t mux_channel);
