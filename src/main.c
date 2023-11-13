@@ -46,8 +46,12 @@ void Configure_DebugPin(uint32_t debug_pin) {
 }
 
 void modbus_routine();
+void read_current_routine(void);
+void read_temperature_routine(void);
+void read_cell_voltage_routine(void);
 void TIM2_IRQ_handler(void);
 void usart1_rx_dma_frame_oversize_check();
+
 
 /* Main routine */
 int main(void) {
