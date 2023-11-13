@@ -21,9 +21,9 @@
 
 void     adc_init(void);
 uint16_t adc_read(const uint8_t adc_ch);
-uint16_t adc_convert_cell_voltage(uint16_t *adc_read(const int adc_pin));
-uint16_t adc_convert_batt_current(uint16_t *adc_read(const int adc_pin));
-uint16_t adc_convert_batt_temp(uint16_t *adc_read(const int adc_pin));
+uint16_t adc_convert_cell_voltage(uint16_t (*adc_read)(const uint8_t adc_channel));
+uint16_t adc_convert_batt_current(uint16_t (*adc_read)(const uint8_t adc_channel));
+uint16_t adc_convert_batt_temp(uint16_t (*adc_read)(const uint8_t adc_channel));
 void inline adc_power_up() { ADC1->CR2 &= ~(ADC_CR2_ADON); }
 void inline adc_power_down() { ADC1->CR2 |= (ADC_CR2_ADON); }
 #endif

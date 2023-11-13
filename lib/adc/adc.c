@@ -3,7 +3,7 @@
 #include "moc_adc_read.h"
 
 /**
- * \brief Initialise ADC settings. 
+ * \brief Initialise ADC settings.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details ADC channel 0, PA0 (A0) in single conversion mode.
  */
@@ -31,7 +31,7 @@ void adc_init(void) {
 }
 
 /**
- * \brief Read single conversion result from selected ADC channel. 
+ * \brief Read single conversion result from selected ADC channel.
  * \param[in] adc_channel The selected channel for conversion.
  * \return 12 bit ADC value.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
@@ -42,7 +42,7 @@ uint16_t adc_read(const uint8_t adc_channel) {
     ADC1->CR2 &= ~(ADC_CR2_ADON);  // Make sure ADC is diabled.
     // Enable the ADC voltage regulator.
     ADC1->CR2 |= (ADC_CR2_ADON);
-    ADC1->SQR5 = adc_channel;             // Set conversion sequence 1 to ch0.
+    ADC1->SQR5 = adc_channel;      // Set conversion sequence 1 to ch0.
     ADC1->CR2 |= ADC_CR2_ADON;     // Set bit 0, ADC on/off (1=on, 0=off).
     ADC1->CR2 |= ADC_CR2_SWSTART;  // start conversion.
     while (!(ADC1->SR & 2)) {
@@ -52,39 +52,39 @@ uint16_t adc_read(const uint8_t adc_channel) {
 }
 
 /**
- * \brief Set return value for moc_adc_read(). 
+ * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
  * \return The cell voltage value.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into 0 - 4125mV.
  */
-uint16_t adc_convert_cell_voltage(uint16_t *adc_read(const int adc_pin)) {
+uint16_t adc_convert_cell_voltage(uint16_t (*adc_read)(const uint8_t adc_channel)) {
     uint16_t cell_adc  = (*adc_read)(ADC_INPUT_CELL_VOLTAGE);
     double   cell_volt = (double)cell_adc / 4095 * 4.125;  // Cell Voltage range 0 - 4.125V
     return (uint16_t)(cell_volt * 1000);                   // accuracy in 1 mV.
 }
 
 /**
- * \brief Set return value for moc_adc_read(). 
+ * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
  * \return The battery charging current value.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into 0 - 41250mA.
  */
-uint16_t adc_convert_batt_current(uint16_t *adc_read(const int adc_pin)) {
+uint16_t adc_convert_batt_current(uint16_t (*adc_read)(const uint8_t adc_channel)) {
     uint16_t current_adc  = (*adc_read)(ADC_INPUT_BATT_CURRENT);
     double   cell_current = (double)current_adc / 4095 * 41.25;  // current sensing range 0 - 41.25A
     return (uint16_t)(cell_current * 1000);                      // accuracy in 1 mA.
 }
 
 /**
- * \brief Set return value for moc_adc_read(). 
+ * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
  * \return The cell voltage value.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into -50 - 150C.
  */
-uint16_t adc_convert_batt_temp(uint16_t *adc_read(const int adc_pin)) {
+uint16_t adc_convert_batt_temp(uint16_t (*adc_read)(const uint8_t adc_channel)) {
     uint16_t temp_adc      = (*adc_read)(ADC_INPUT_BATT_TEMP);
     uint16_t reference_adc = 1240;  // 1V reference voltage on LM35, need to be measured still.
     double   temp_celcius  = (temp_adc - reference_adc) / 4095 * 3.3;  //
