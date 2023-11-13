@@ -3,6 +3,7 @@
 #include "iwdg.h"
 #include "modbus_rtu.h"
 #include "modbus_rtu_func_4.h"
+#include "mux.h"
 #include "stdbool.h"
 #include "sysclock_config.h"
 #include "timer.h"
@@ -58,6 +59,8 @@ int main(void) {
     USART2_dma_init();
 #endif
     IWDG_init();
+    adc_init();
+    mux_init();
     LED2_init();
     timer2_init();
     timer2_start(1000, 1000);
@@ -71,16 +74,13 @@ int main(void) {
         IWDG_feed();
 
         if (subroutine_flag & ADC_READ_CURRENT) {
-            adc_read_current(modbus_registers + REG_ADDR_BATT_CURRENT);
-            subroutine_flag &= ~ADC_READ_CURRENT;
+            read_current_routine();
         }
         if (subroutine_flag & ADC_READ_TEMPERATURE) {
-            adc_read_temperature(modbus_registers + REG_ADDR_BATT_TEMP);
-            subroutine_flag &= ~ADC_READ_TEMPERATURE;
+            read_temperature_routine();
         }
         if (subroutine_flag & ADC_READ_VOLTS) {
-            adc_read_volts(modbus_registers + REG_ADDR_CELL1_VOLT);
-            subroutine_flag &= ~ADC_READ_VOLTS;
+            read_cell_voltage_routine();
         }
         if (subroutine_flag & MODBUS_REQUEST) {
             modbus_routine();
@@ -144,6 +144,83 @@ void modbus_routine(void) {
     dma1_ch5_tc_flag = false;
     USART1_RX_DMA_Buffer_Reset();
     DMA1_Channel15_Reload();
+}
+
+void read_current_routine(void) {
+    mux_set(MUX_SEL_CH4);
+    uint16_t current                        = adc_convert_batt_current(adc_read);
+    modbus_registers[REG_ADDR_BATT_CURRENT] = current;
+    if (current == 0) {
+        // There is no discharging current sensing yet in this project. Turn mosfet control to fully
+        // open for discharging. But no way to shutdown by discharging current. TBD - mosfet_control
+        // mosfet_control(MOSFET_BIDIRECTION);
+    } else if (current < 500) {
+        // Maxium Drain-Source Diode forward current is 1300mA. Using 500mA for super safety.
+        // mosfet_control(MOSFET_CHARGE_ONLY);
+    } else if (current < 33840) {  // 10% below mosfet maximum rating of Drain Current.
+
+        // warning();
+    } else if (current > 37600) {  // Absolute maximum value for
+        // mosfet_contro(MOSFET_SHUT_DOWN);
+    }
+    subroutine_flag &= ~ADC_READ_CURRENT;
+}
+
+void read_temperature_routine(void) {
+    mux_set(MUX_SEL_CH5);
+    uint16_t temp_uint                   = adc_convert_batt_temp(adc_read);
+    modbus_registers[REG_ADDR_BATT_TEMP] = temp_uint;
+    double temp_double                   = (double)(int)temp_uint;
+    if (temp_double > 60.0) {
+        // mosfet_control(MOSFET_SHUT_DOWN);
+    } else {
+        // mosfet_control(MOSFET_PREVIOUS_STATE);
+    }
+    subroutine_flag &= ~ADC_READ_TEMPERATURE;
+}
+
+void read_cell_voltage_routine(void) {
+    mux_set(MUX_SEL_CH0);
+    uint16_t voltage                      = adc_convert_cell_voltage(adc_read);
+    modbus_registers[REG_ADDR_CELL1_VOLT] = voltage;
+    if (voltage <= 2600) {
+        // stm32_sleep();
+        // Wakeup by ADC, Timer?
+    } 
+    if (voltage >= 3330) {
+        // mosfet_control(MOSFET_SHUT_DOWN);
+    }
+
+    mux_set(MUX_SEL_CH1);
+    voltage                               = adc_convert_cell_voltage(adc_read);
+    modbus_registers[REG_ADDR_CELL2_VOLT] = voltage;
+    if (voltage <= 2600) {
+        // stm32_sleep();
+    }
+    if (voltage >= 3330) {
+        // mosfet_control(MOSFET_SHUT_DOWN);
+    }
+
+    mux_set(MUX_SEL_CH2);
+    voltage                               = adc_convert_cell_voltage(adc_read);
+    modbus_registers[REG_ADDR_CELL3_VOLT] = voltage;
+    if (voltage <= 2600) {
+        // stm32_sleep();
+    }
+    if (voltage >= 3330) {
+        // mosfet_control(MOSFET_SHUT_DOWN);
+    }
+
+    mux_set(MUX_SEL_CH3);
+    voltage                               = adc_convert_cell_voltage(adc_read);
+    modbus_registers[REG_ADDR_CELL4_VOLT] = voltage;
+    if (voltage <= 2600) {
+        // stm32_sleep();
+    }
+    if (voltage >= 3330) {
+        // mosfet_control(MOSFET_SHUT_DOWN);
+    }
+    subroutine_flag &= ~ADC_READ_VOLTS;
 }
 
 /**
