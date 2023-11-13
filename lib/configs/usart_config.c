@@ -23,7 +23,7 @@ void USART1_dma_init(void) {
      * PA9/D8   ------> USART1_TX
      * PA10/D2  ------> USART1_RX
      * PA7/D11	------> TX_EN
-     * USART2_RX --> DMA1_channel_5
+     * USART1_RX --> DMA1_channel_5
      */
 
     // ref. manual p.260
