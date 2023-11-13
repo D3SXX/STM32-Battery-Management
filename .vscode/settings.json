@@ -8,7 +8,10 @@
         "stm32l1xx.h": "c",
         "sysclock_config.h": "c",
         "stdint.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "unity_config.h": "c",
+        "modbus_rtu_types.h": "c",
+        "modbus_rtu_func_4.h": "c"
     },
     "cmake.configureOnOpen": false
 }
