@@ -1,6 +1,10 @@
 #include "sysclock_config.h"
 
-#include "..\STM32L1xx_LL_Driver\src\STM32L1xx_LL_Driver.h"
+#include "stm32l1xx_ll_bus.h"
+#include "stm32l1xx_ll_rcc.h"
+#include "stm32l1xx_ll_system.h"
+#include "stm32l1xx_ll_utils.h"
+#include "stm32l1xx_ll_gpio.h"
 /*
  * sysclock_config.c
  *

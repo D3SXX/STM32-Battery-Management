@@ -14,5 +14,6 @@
         "modbus_rtu_func_4.h": "c",
         "mux.h": "c"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }
