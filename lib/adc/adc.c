@@ -1,11 +1,24 @@
 #include "adc.h"
 
+#define HSI_STARTUP_TIMEOUT   ((uint16_t)0x0500) /* Time out for HSI start up */
+
 /**
  * \brief Initialise ADC settings.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details ADC channel 0, PA0 (A0) in single conversion mode.
  */
 void adc_init(void) {
+    //Enable HSI without set it as system clock for ADC
+    __IO uint32_t StartUpCounter = 0, HSIStatus = 0;
+
+    /* Enable HSI */
+    RCC->CR |= ((uint32_t)RCC_CR_HSION);
+
+    /* Wait till HSI is ready and if Time out is reached exit */
+    do {
+        HSIStatus = RCC->CR & RCC_CR_HSIRDY;
+    } while ((HSIStatus == 0) && (StartUpCounter != HSI_STARTUP_TIMEOUT));
+
     /* PA0 (A0) -- MUX (CH0)
        PA1 (A1) -- Temp_P ?
        PA4 (A2) -- Temp_N ?
@@ -39,11 +52,10 @@ uint16_t adc_read(const uint8_t adc_channel) {
     int result = 0;
     ADC1->CR2 &= ~(ADC_CR2_ADON);  // Make sure ADC is diabled.
     // Enable the ADC voltage regulator.
-    ADC1->CR2 |= (ADC_CR2_ADON);
     ADC1->SQR5 = adc_channel;      // Set conversion sequence 1 to ch0.
     ADC1->CR2 |= ADC_CR2_ADON;     // Set bit 0, ADC on/off (1=on, 0=off).
     ADC1->CR2 |= ADC_CR2_SWSTART;  // start conversion.
-    while (!(ADC1->SR & 2)) {
+    while (!(ADC1->SR & ADC_SR_EOC)) {
     }                   // wait for conversion complete
     result = ADC1->DR;  // read conversion result
     return result;

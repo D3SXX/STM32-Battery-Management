@@ -11,7 +11,8 @@
         "utils.h": "c",
         "unity_config.h": "c",
         "modbus_rtu_types.h": "c",
-        "modbus_rtu_func_4.h": "c"
+        "modbus_rtu_func_4.h": "c",
+        "mux.h": "c"
     },
     "cmake.configureOnOpen": false
 }
