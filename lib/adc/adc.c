@@ -8,6 +8,7 @@
  * \details ADC channel 0, PA0 (A0) in single conversion mode.
  */
 void adc_init(void) {
+    //Enable HSI without set it as system clock for ADC
     __IO uint32_t StartUpCounter = 0, HSIStatus = 0;
 
     /* Enable HSI */
@@ -17,6 +18,7 @@ void adc_init(void) {
     do {
         HSIStatus = RCC->CR & RCC_CR_HSIRDY;
     } while ((HSIStatus == 0) && (StartUpCounter != HSI_STARTUP_TIMEOUT));
+
     /* PA0 (A0) -- MUX (CH0)
        PA1 (A1) -- Temp_P ?
        PA4 (A2) -- Temp_N ?
