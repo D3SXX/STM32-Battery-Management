@@ -5,14 +5,14 @@
 void mux_init() {
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;  // Enable GPIOB
 
-    // GPIOB->MODER &= ~((GPIO_MODE_OUTPUT << MODER_MUX_A) |  // Reset PB3
-    //                   (GPIO_MODE_OUTPUT << MODER_MUX_B) |  // Reset PB5
-    //                   (GPIO_MODE_OUTPUT << MODER_MUX_C));  // Reset PB4
+    GPIOB->MODER &= ~((0b11 << MODER_MUX_A) |  // Reset PB3
+                      (0b11 << MODER_MUX_B) |  // Reset PB5
+                      (0b11 << MODER_MUX_C));  // Reset PB4
 
-    // GPIOB->MODER |= ((GPIO_MODE_OUTPUT << MODER_MUX_A) |  // Set PB3 to OUTPUT mode
-    //                  (GPIO_MODE_OUTPUT << MODER_MUX_B) |  // Set PB5 to OUTPUT mode
-    //                  (GPIO_MODE_OUTPUT << MODER_MUX_C));  // Set PB4 to OUTPUT mode
-    GPIOB->MODER = 0x540U;
+    GPIOB->MODER |= ((GPIO_MODE_OUTPUT << MODER_MUX_A) |  // Set PB3 to OUTPUT mode
+                     (GPIO_MODE_OUTPUT << MODER_MUX_B) |  // Set PB5 to OUTPUT mode
+                     (GPIO_MODE_OUTPUT << MODER_MUX_C));  // Set PB4 to OUTPUT mode
+    // GPIOB->MODER = 0x540U;
 
     GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_3 | GPIO_OTYPER_OT_4 | GPIO_OTYPER_OT_5);
 
