@@ -22,7 +22,7 @@ modbus_rtu_rqst_t modbus_rtu_create(void) {
  */
 MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
     MODBUS_RTU_ERR err;
-    uint8_t        reply_data[8] = {0};
+    uint8_t        reply_data[8]  = {0};
     uint8_t        reply_data_len = 0;
 
     // Validate CRC checksum
@@ -88,6 +88,7 @@ MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
             }
         }
     }
+    return err;
 }
 
 /**
@@ -133,8 +134,9 @@ void modbusRtu_ErrorReply(const uint8_t *const modbus_rtu_frame,
 uint8_t *modbusRtu_CreateReplyFrame(const modbus_rtu_rqst_t *const modbus_rtu_rqst) {
     // addr(1B) + f_code(1B) + byte_cnt(1B) + CRC(2B) = 5 bytes
     // the rest = reg_qty(2B) * 2
-    int reply_frame_len = 5 + modbus_rtu_rqst->RegisterQuantity * 2;
-    uint8_t reply_frame = (uint8_t*)calloc(reply_frame_len, sizeof(uint8_t));
+    int      reply_frame_len = 5 + modbus_rtu_rqst->RegisterQuantity * 2;
+    uint8_t *reply_frame     = (uint8_t *)calloc(reply_frame_len, sizeof(uint8_t));
+    return reply_frame;
 }
 
 /**
@@ -179,9 +181,9 @@ void modbusRtu_Reply(const uint8_t *const modbus_rtu_frame, const uint8_t *data,
 MODBUS_RTU_ERR modbusRtu_CrcCheck(const uint8_t *const modbus_rtu_frame) {
     uint16_t crc_checksum = 0;
     uint16_t crc_calcuate = 0;
-    char     crc_str[10];
     crc_calcuate = CRC16(modbus_rtu_frame, 6);
 #if (DEBUG_CONSOLE_EN > 0u)
+    char     crc_str[10];
     debug_console("CRC_CAL=");
     debug_console(itoa(crc_calcuate, crc_str, 10));
 #endif
