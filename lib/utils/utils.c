@@ -5,7 +5,6 @@
  *      Author: Siyuan Xu
  */
 #include "utils.h"
-#include "usart_config.h"
 #include <stdlib.h>
 
 #include "stm32l1xx.h"
