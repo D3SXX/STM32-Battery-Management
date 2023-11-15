@@ -39,11 +39,22 @@
 #define BATT_CELL_VOLT_LOW          (uint16_t)3130  // 14%
 #define BATT_CELL_VOLT_HIGH         (uint16_t)3330  // 90%
 
+#define BATT_TEMPERATURE_MIN        (float)-20.0
+#define BATT_TEMPERATURE_MAX        (float)60.0
+#define BATT_TEMPERATURE_LOW        (float)0.0
+#define BATT_TEMPERATURE_HIGH       (float)45.0
+
+#define BATT_CURRENT_LOW            (uint16t)500
+#define BATT_CURRENT_HIGH           (uint16t)1300
+#define BATT_CURRENT_MIN            (uint16t)0
+#define BATT_CURRENT_MAX            (uint16t)37600
+
 BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t voltage);
 BATTERY_STATUS battery_manager_voltage_check(const uint16_t voltage);
-BATTERY_STATUS battery_manager_current_check(const double current);
+BATTERY_STATUS battery_manager_current_check(const uint16_t current);
 BATTERY_STATUS battery_manager_temperature_check(const double temperature);
+BATTERY_STATUS battery_manager_status_get(void);
 BATTERY_STATUS battery_manager_status_set(const BATTERY_STATUS      status,
                                           const BATTERY_STATUS_MASK mask);
-BATTERY_STATUS battery_manager_status_get(void);
+void           battery_manager_management_routine(void);
 #endif

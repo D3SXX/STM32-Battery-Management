@@ -36,6 +36,9 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t voltage) {
     return result;
 }
 
+BATTERY_STATUS battery_manager_current_check(const uint16_t current) {}
+BATTERY_STATUS battery_manager_temperature_check(const double temperature) {}
+
 BATTERY_STATUS battery_manager_status_set(const BATTERY_STATUS      status,
                                           const BATTERY_STATUS_MASK mask) {
     battery_status &= ~mask;
