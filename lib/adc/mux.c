@@ -1,6 +1,6 @@
 #include "mux.h"
 
-#include "utils.h"
+#include "..\utils\utils.h"
 
 void mux_init() {
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;  // Enable GPIOB

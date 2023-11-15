@@ -12,7 +12,12 @@
         "unity_config.h": "c",
         "modbus_rtu_types.h": "c",
         "modbus_rtu_func_4.h": "c",
-        "mux.h": "c"
+        "mux.h": "c",
+        "adc_utils.h": "c",
+        "adc_settings.h": "c",
+        "moc_adc_read.h": "c",
+        "stm32l152xe.h": "c",
+        "core_cm3.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "disabled"
