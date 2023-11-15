@@ -5,6 +5,7 @@
  *      Author: Siyuan Xu
  */
 #include "utils.h"
+
 #include <stdlib.h>
 
 #include "stm32l1xx.h"
@@ -33,7 +34,7 @@ void delay_ms(const uint32_t delay) {
  * \author siyuan xu, e2101066@edu.vamk.fi, Oct.2023
  */
 void delay_ms_random(const uint32_t max) {
-    srand(SysTick->VAL);                       // Seed the random number generator
+    srand(SysTick->VAL);                         // Seed the random number generator
     uint32_t delay = (rand() / RAND_MAX) * max;  // random [0 - max] ms
     delay_ms(delay);
 }
@@ -43,4 +44,8 @@ void delay_ms_random(const uint32_t max) {
  * \param[in] message - Debug message
  * \author siyuan xu, e2101066@edu.vamk.fi, Mar.2023
  */
-void debug_console(const char *message) { USART2_send_string(message); }
+void debug_console(const char *message) {
+#if (DEBUG_CONSOLE_EN > 0u)
+    USART2_send_string(message);
+#endif
+}
