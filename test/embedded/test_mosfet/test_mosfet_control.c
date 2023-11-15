@@ -1,7 +1,7 @@
 #include <unity.h>
 
 #include "../unity_config.h"
-#include "stm32l1xx.h"
+#include "mosfet_control.h"
 #include "usart_config.h"
 
 void setUp(void) {
@@ -13,62 +13,62 @@ void tearDown(void) {
 }
 
 void test_mosfet_control_set_pb6(void) {
-    // mosfet_control_set_single_pin(6u);
+    mosfet_control_set_single_pin(6u);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x08, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset_single_pin(6u);
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x40, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset_single_pin(6u);
     // HAL_Delay(1000);
 }
 
 void test_mosfet_control_set_pb10(void) {
-    // mosfet_control_set_single_pin(10u);
+    mosfet_control_set_single_pin(10u);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x08, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset_single_pin(10u);
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x400, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset_single_pin(10u);
     // HAL_Delay(1000);
 }
 
 void test_mosfet_control_set_closed(void) {
-    // mosfet_control_set(MOSFET_CONTROL_CLOSED);
+    mosfet_control_set(MOSFET_CONTROL_CLOSED);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x0, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset();
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x0, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset();
     // HAL_Delay(1000);
 }
 
 void test_mosfet_control_set_open(void) {
-    // mosfet_control_set(MOSFET_CONTROL_OPEN);
+    mosfet_control_set(MOSFET_CONTROL_OPEN);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x0, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset();
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x440, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset();
     // HAL_Delay(1000);
 }
 
 void test_mosfet_control_set_charge(void) {
-    // mosfet_control_set(MOSFET_CONTROL_CHARGE);
+    mosfet_control_set(MOSFET_CONTROL_CHARGE);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x0, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset();
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x400, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset();
     // HAL_Delay(1000);
 }
 
 void test_mosfet_control_set_discharge(void) {
-    // mosfet_control_set(MOSFET_CONTROL_DISCHARGE);
+    mosfet_control_set(MOSFET_CONTROL_DISCHARGE);
     // HAL_Delay(1000);
-    // uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_IDR_ODR_MASK));
-    // TEST_ASSERT_EQUAL(0x0, gpiob_status);
-    TEST_FAIL_MESSAGE("Not Implemented.");
-    // mosfet_control_reset();
+    uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
+    TEST_ASSERT_EQUAL(0x40, gpiob_status);
+    // TEST_FAIL_MESSAGE("Not Implemented.");
+    mosfet_control_reset();
     // HAL_Delay(1000);
 }
 
@@ -81,6 +81,7 @@ static inline void LED2_init(void) {
 int main(int argc, char **argv) {
     HAL_Init();       // initialize the HAL library
     HAL_Delay(2000);  // service delay
+    mosfet_control_init();
     LED2_init();
 
     UNITY_BEGIN();
