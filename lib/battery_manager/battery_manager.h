@@ -3,26 +3,30 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define BATT_STAT_GOOD             0x00UL
-#define BATT_STAT_ERROR            0x01UL
-#define BATT_STAT_VOLT_LOW         0x02UL
-#define BATT_STAT_VOLT_HIGH        0x04UL
-#define BATT_STAT_VOLT_EMPTY       0x08UL
-#define BATT_STAT_VOLT_FULL        0x10UL
-#define BATT_STAT_TEMPERATURE_LOW  0x20UL
-#define BATT_STAT_TEMPERATURE_HIGH 0x40UL
-#define BATT_STAT_CURRENT_LOW      0x80UL
-#define BATT_STAT_CURRENT_HIGH     0x100UL
-#define BATT_STAT_CHARGING         0x200ul
-#define BATT_STAT_DISCHARGING      0x400UL
-#define BATT_STAT_REST             0x800UL  // Neither charging nor discharging.
+#define BATT_STAT_GOOD          0x00UL
+#define BATT_STAT_ERROR         0x01UL
+#define BATT_STAT_VOLT_LOW      0x02UL
+#define BATT_STAT_VOLT_HIGH     0x04UL
+#define BATT_STAT_VOLT_EMPTY    0x08UL
+#define BATT_STAT_VOLT_FULL     0x10UL
+#define BATT_STAT_VOLT_OPTIM    0x20UL
+#define BATT_STAT_TEMP_LOW      0x20UL
+#define BATT_STAT_TEMP_HIGH     0x40UL
+#define BATT_STAT_TEMP_OPTIM    0x40UL
+#define BATT_STAT_CURRENT_LOW   0x80UL
+#define BATT_STAT_CURRENT_HIGH  0x100UL
+#define BATT_STAT_CURRENT_OPTIM 0x100UL
+#define BATT_STAT_CHARGING      0x200ul
+#define BATT_STAT_DISCHARGING   0x400UL
+#define BATT_STAT_REST          0x800UL  // Neither charging nor discharging.
 
-#define BATT_STAT_VOLT_MASK \
-    (BATT_STAT_VOLT_LOW | BATT_STAT_VOLT_HIGH | BATT_STAT_VOLT_EMPTY | BATT_STAT_VOLT_FULL)
+#define BATT_STAT_VOLT_MASK                                                                  \
+    (BATT_STAT_VOLT_LOW | BATT_STAT_VOLT_HIGH | BATT_STAT_VOLT_EMPTY | BATT_STAT_VOLT_FULL | \
+     BATT_STAT_VOLT_OPTIM)
 #define BATT_STAT_CURRENT_MASK                                                                     \
     (BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_HIGH | BATT_STAT_CHARGING | BATT_STAT_DISCHARGING | \
-     BATT_STAT_REST)
-#define BATT_STAT_TEMPERATURE_MASK  (BATT_STAT_TEMPERATURE_LOW | BATT_STAT_TEMPERATURE_LOW)
+     BATT_STAT_REST | BATT_STAT_CURRENT_OPTIM)
+#define BATT_STAT_TEMPERATURE_MASK  (BATT_STAT_TEMP_LOW | BATT_STAT_TEMP_HIGH | BATT_STAT_TEMP_OPTIM)
 
 #define BATTERY_STATUS              uint32_t
 #define BATTERY_STATUS_MASK         uint32_t
