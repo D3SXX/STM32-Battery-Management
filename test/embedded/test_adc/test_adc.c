@@ -2,6 +2,7 @@
 
 #include "../unity_config.h"
 #include "adc.h"
+#include "adc_utils.h"
 #include "moc_adc_read.h"
 #include "stm32l1xx.h"
 #include "usart_config.h"
