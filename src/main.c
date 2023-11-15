@@ -3,6 +3,7 @@
 #include "iwdg.h"
 #include "modbus_rtu.h"
 #include "modbus_rtu_func_4.h"
+#include "mosfet_control.h"
 #include "mux.h"
 #include "stdbool.h"
 #include "sysclock_config.h"
@@ -64,6 +65,7 @@ int main(void) {
     IWDG_init();
     adc_init();
     mux_init();
+    mosfet_control_init();
     LED2_init();
     timer2_init();
     timer2_start(1000, 1000);
@@ -157,15 +159,17 @@ void read_current_routine(void) {
     if (current == 0) {
         // There is no discharging current sensing yet in this project. Turn mosfet control to fully
         // open for discharging. But no way to shutdown by discharging current. TBD - mosfet_control
-        // mosfet_control(MOSFET_BIDIRECTION);
+        mosfet_control_set(MOSFET_CONTROL_OPEN);
     } else if (current < 500) {
         // Maxium Drain-Source Diode forward current is 1300mA. Using 500mA for super safety.
-        // mosfet_control(MOSFET_CHARGE_ONLY);
+        mosfet_control_set(MOSFET_CONTROL_CHARGE);
+    } else if (current < 1000) {
+        // Fully open for charging
+        mosfet_control_set(MOSFET_CONTROL_OPEN);
     } else if (current < 33840) {  // 10% below mosfet maximum rating of Drain Current.
-
-        // warning();
-    } else if (current > 37600) {  // Absolute maximum value for
-        // mosfet_contro(MOSFET_SHUT_DOWN);
+        // maybe some warning();
+    } else if (current > 37600) {  // Absolute maximum value, now discharge only
+        mosfet_contro(MOSFET_CONTROL_DISCHARGE);
     }
     subroutine_flag &= ~ADC_READ_CURRENT;
 }
@@ -176,7 +180,8 @@ void read_temperature_routine(void) {
     modbus_registers[REG_ADDR_BATT_TEMP] = temp_uint;
     double temp_double                   = (double)(int)temp_uint;
     if (temp_double > 60.0) {
-        // mosfet_control(MOSFET_SHUT_DOWN);
+        // Dangerous condition shutdown battery
+        mosfet_control_set(MOSFET_CONTROL_CLOSED);
     } else {
         // mosfet_control(MOSFET_PREVIOUS_STATE);
     }
@@ -187,12 +192,16 @@ void read_cell_voltage_routine(void) {
     mux_set(MUX_SEL_CH0);
     uint16_t voltage                      = adc_convert_cell_voltage(adc_read);
     modbus_registers[REG_ADDR_CELL1_VOLT] = voltage;
-    if (voltage <= 2600) {
-        // stm32_sleep();
-        // Wakeup by ADC, Timer?
-    }
-    if (voltage >= 3330) {
-        // mosfet_control(MOSFET_SHUT_DOWN);
+    if (voltage <= 2500) {
+        // Battery empty
+        // stm32_go_sleep();
+        // Wakeup by ADC, Timer(once per hour to check)?
+    } else if (voltage <= 3280) {
+        // Battery 40% charging again
+        mosfet_control_set(MOSFET_CONTROL_CHARGE);
+    } else if (voltage >= 3650) {
+        // Battery Full
+        mosfet_control_set(MOSFET_CONTROL_CLOSED);
     }
 
     mux_set(MUX_SEL_CH1);
