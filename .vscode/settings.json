@@ -18,7 +18,8 @@
         "moc_adc_read.h": "c",
         "stm32l152xe.h": "c",
         "core_cm3.h": "c",
-        "mosfet_control.h": "c"
+        "mosfet_control.h": "c",
+        "battery_manager.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "disabled"
