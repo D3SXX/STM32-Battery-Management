@@ -36,7 +36,7 @@
      BATT_STAT_VOLT_FULL | BATT_STAT_VOLT_OPTIM)
 #define BATT_STAT_CURRENT_MASK                                                                     \
     (BATT_STAT_HEALTH_MASK | BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_HIGH | BATT_STAT_CHARGING | \
-     BATT_STAT_DISCHARGING | BATT_STAT_REST | BATT_STAT_CURRENT_OPTIM)
+     BATT_STAT_DISCHARGING | BATT_STAT_REST | BATT_STAT_CURRENT_OPTIM | BATT_STAT_CURRENT_MTHRESH)
 #define BATT_STAT_TEMPERATURE_MASK \
     (BATT_STAT_HEALTH_MASK | BATT_STAT_TEMP_LOW | BATT_STAT_TEMP_HIGH | BATT_STAT_TEMP_OPTIM)
 
@@ -63,7 +63,7 @@
 
 BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t voltage);
 BATTERY_STATUS battery_manager_voltage_check(const uint16_t voltage);
-BATTERY_STATUS battery_manager_current_check(const int32_t current);
+BATTERY_STATUS battery_manager_current_check(int32_t current);
 BATTERY_STATUS battery_manager_temperature_check(const double temperature);
 BATTERY_STATUS battery_manager_status_get(void);
 BATTERY_STATUS battery_manager_status_set(const BATTERY_STATUS status_result);

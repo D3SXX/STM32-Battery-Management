@@ -43,7 +43,42 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t voltage) {
     return result;
 }
 
-BATTERY_STATUS battery_manager_current_check(const uint16_t current) {}
+/**
+ * \brief Evaluate the battery status by giving current.
+ * \param[in] current Batter temperature, sensor range -55C - 150C.
+ * \return BATTERY_STATUS self-explain.
+ * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
+ */
+BATTERY_STATUS battery_manager_current_check(int32_t current) {
+    BATTERY_STATUS result = BATT_STAT_GOOD;
+    if (current == BATT_CURRENT_MIN) {
+        result = (BATT_STAT_GOOD | BATT_STAT_REST);
+    } else {
+        /* Check for charging/discharging. */
+        if (current < BATT_CURRENT_MIN) {
+            // Discharging
+            current = 0 - current;  // flip the sign for easier
+            result |= BATT_STAT_DISCHARGING;
+        } else {
+            // Charing
+            result |= BATT_STAT_CHARGING;
+        }
+        /* Check for low, high, mthresh, optim */
+        if (current < BATT_CURRENT_MTHRESH - BATT_CURRENT_SAFETY_OFFSET) {
+            result |= (BATT_STAT_GOOD | BATT_STAT_CURRENT_LOW);
+        } else if (current < BATT_CURRENT_OPTIM) {
+            result |= (BATT_STAT_GOOD | BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_MTHRESH);
+        } else if (current < BATT_CURRENT_MAX - BATT_CURRENT_SAFETY_OFFSET) {
+            result |= (BATT_STAT_GOOD | BATT_STAT_CURRENT_OPTIM | BATT_STAT_CURRENT_MTHRESH);
+        } else if (current < BATT_CURRENT_MAX) {
+            result |= (BATT_STAT_GOOD | BATT_STAT_CURRENT_HIGH | BATT_STAT_CURRENT_MTHRESH);
+        } else {
+            result |= (BATT_STAT_ERROR | BATT_STAT_CURRENT_HIGH | BATT_STAT_CURRENT_MTHRESH);
+        }
+    }
+    battery_manager_status_overwrite(result, BATT_STAT_CURRENT_MASK);
+    return result;
+}
 
 /**
  * \brief Evaluate the battery status by giving temperature.
