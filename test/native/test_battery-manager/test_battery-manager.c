@@ -251,6 +251,96 @@ void test_battery_manager_current_check_charge_error_2(void) {
     TEST_ASSERT_EQUAL(expect, result);
 }
 
+void test_battery_manager_current_check_discharge_low_1(void) {
+    BATTERY_STATUS result = battery_manager_current_check(BATT_CURRENT_MIN - 1);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_2(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - BATT_CURRENT_LOW);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_3(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0- (BATT_CURRENT_LOW + 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_4(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0- (BATT_CURRENT_MTHRESH - BATT_CURRENT_SAFETY_OFFSET - 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_thresh_1(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MTHRESH - BATT_CURRENT_SAFETY_OFFSET));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_MTHRESH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_thresh_2(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - BATT_CURRENT_MTHRESH);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_MTHRESH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_low_thresh_3(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_OPTIM - 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_LOW | BATT_STAT_CURRENT_MTHRESH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_optim_1(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_OPTIM));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_OPTIM);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_optim_2(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_OPTIM + 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_OPTIM);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_optim_3(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MAX - BATT_CURRENT_SAFETY_OFFSET - 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_OPTIM);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_high_1(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MAX - BATT_CURRENT_SAFETY_OFFSET));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_HIGH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_high_2(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MAX - BATT_CURRENT_SAFETY_OFFSET + 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_HIGH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_high_3(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MAX - 1));
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_HIGH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_error_1(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - BATT_CURRENT_MAX);
+    BATTERY_STATUS expect = (BATT_STAT_ERROR | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_HIGH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
+void test_battery_manager_current_check_discharge_error_2(void) {
+    BATTERY_STATUS result = battery_manager_current_check(0 - (BATT_CURRENT_MAX + 1));
+    BATTERY_STATUS expect = (BATT_STAT_ERROR | BATT_STAT_DISCHARGING | BATT_STAT_CURRENT_MTHRESH | BATT_STAT_CURRENT_HIGH);
+    TEST_ASSERT_EQUAL(expect, result);
+}
+
 
 int main(int argc, char **argv) {
     UNITY_BEGIN();
@@ -280,6 +370,7 @@ int main(int argc, char **argv) {
     RUN_TEST(test_battery_manager_temperature_check_error_high_1);
     RUN_TEST(test_battery_manager_temperature_check_error_high_2);
 
+    RUN_TEST(test_battery_manager_current_check_rest);
     RUN_TEST(test_battery_manager_current_check_charge_low_1);
     RUN_TEST(test_battery_manager_current_check_charge_low_2);
     RUN_TEST(test_battery_manager_current_check_charge_low_3);
@@ -295,6 +386,22 @@ int main(int argc, char **argv) {
     RUN_TEST(test_battery_manager_current_check_charge_high_3);
     RUN_TEST(test_battery_manager_current_check_charge_error_1);
     RUN_TEST(test_battery_manager_current_check_charge_error_2);
+    
+    RUN_TEST(test_battery_manager_current_check_discharge_low_1);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_2);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_3);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_4);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_thresh_1);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_thresh_2);
+    RUN_TEST(test_battery_manager_current_check_discharge_low_thresh_3);
+    RUN_TEST(test_battery_manager_current_check_discharge_optim_1);
+    RUN_TEST(test_battery_manager_current_check_discharge_optim_2);
+    RUN_TEST(test_battery_manager_current_check_discharge_optim_3);
+    RUN_TEST(test_battery_manager_current_check_discharge_high_1);
+    RUN_TEST(test_battery_manager_current_check_discharge_high_2);
+    RUN_TEST(test_battery_manager_current_check_discharge_high_3);
+    RUN_TEST(test_battery_manager_current_check_discharge_error_1);
+    RUN_TEST(test_battery_manager_current_check_discharge_error_2);
     
     UNITY_END();
 
