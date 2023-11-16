@@ -81,7 +81,7 @@ BATTERY_STATUS battery_manager_temperature_check(const double temperature) {
 BATTERY_STATUS battery_manager_status_overwrite(const BATTERY_STATUS      status_result,
                                                 const BATTERY_STATUS_MASK mask) {
     battery_status &= ~mask;
-    battery_status |= status;
+    battery_status |= status_result;
     return battery_status;
 }
 
