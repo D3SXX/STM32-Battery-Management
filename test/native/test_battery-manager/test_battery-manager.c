@@ -24,12 +24,12 @@ void test_battery_manager_cell_voltage_check_low(void) {
 
 void test_battery_manager_cell_voltage_check_good_l(void) {
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_LOW + 1);
-    BATTERY_STATUS expect = (BATT_STAT_GOOD);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_VOLT_OPTIM);
     TEST_ASSERT_EQUAL(expect, result);
 }
 void test_battery_manager_cell_voltage_check_good_h(void) {
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_HIGH - 1);
-    BATTERY_STATUS expect = (BATT_STAT_GOOD);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_VOLT_OPTIM);
     TEST_ASSERT_EQUAL(expect, result);
 }
 
@@ -40,19 +40,19 @@ void test_battery_manager_cell_voltage_check_high_1(void) {
 }
 
 void test_battery_manager_cell_voltage_check_high_2(void) {
-    battery_manager_status_set(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_MAX_RESTING);
     BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_VOLT_HIGH);
     TEST_ASSERT_EQUAL(expect, result);
-    battery_manager_status_set(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
 }
 
 void test_battery_manager_cell_voltage_check_high_3(void) {
-    battery_manager_status_set(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_MAX_CHARGING - 1);
     BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_VOLT_HIGH);
     TEST_ASSERT_EQUAL(expect, result);
-    battery_manager_status_set(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
 }
 
 void test_battery_manager_cell_voltage_check_full_rest(void) {
@@ -62,11 +62,11 @@ void test_battery_manager_cell_voltage_check_full_rest(void) {
 }
 
 void test_battery_manager_cell_voltage_check_full_charging(void) {
-    battery_manager_status_set(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_MAX_CHARGING);
     BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_VOLT_FULL);
     TEST_ASSERT_EQUAL(expect, result);
-    battery_manager_status_set(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
 }
 
 void test_battery_manager_cell_voltage_check_error_full_1(void) {
@@ -88,11 +88,11 @@ void test_battery_manager_cell_voltage_check_error_full_3(void) {
 }
 
 void test_battery_manager_cell_voltage_check_error_full_4(void) {
-    battery_manager_status_set(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_CHARGING, BATT_STAT_CURRENT_MASK);
     BATTERY_STATUS result = battery_manager_cell_voltage_check(BATT_CELL_VOLT_MAX_CHARGING + 1);
     BATTERY_STATUS expect = (BATT_STAT_ERROR | BATT_STAT_VOLT_FULL);
     TEST_ASSERT_EQUAL(expect, result);
-    battery_manager_status_set(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
+    battery_manager_status_overwrite(BATT_STAT_GOOD, BATT_STAT_CURRENT_MASK);
 }
 
 void test_battery_manager_battery_temperature_check_error_low_1(void) {
@@ -125,7 +125,7 @@ void test_battery_manager_battery_temperature_check_good_1(void) {
     TEST_ASSERT_EQUAL(expect, result);
 }
 
-void test_battery_manager_battery_temperature_check_good_1(void) {
+void test_battery_manager_battery_temperature_check_good_2(void) {
     BATTERY_STATUS result = battery_manager_temperature_check(BATT_TEMPERATURE_HIGH - 1);
     BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_TEMP_OPTIM);
     TEST_ASSERT_EQUAL(expect, result);
@@ -139,7 +139,7 @@ void test_battery_manager_battery_temperature_check_high_1(void) {
 
 void test_battery_manager_battery_temperature_check_high_2(void) {
     BATTERY_STATUS result = battery_manager_temperature_check(BATT_TEMPERATURE_MAX - 1);
-    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_TEMPERATURE_HIGH);
+    BATTERY_STATUS expect = (BATT_STAT_GOOD | BATT_STAT_TEMP_HIGH);
     TEST_ASSERT_EQUAL(expect, result);
 }
 
@@ -157,6 +157,7 @@ void test_battery_manager_battery_temperature_check_error_high_2(void) {
 
 int main(int argc, char **argv) {
     UNITY_BEGIN();
+
     RUN_TEST(test_battery_manager_cell_voltage_check_error_empty);
     RUN_TEST(test_battery_manager_cell_voltage_check_low);
     RUN_TEST(test_battery_manager_cell_voltage_check_good_l);
@@ -170,6 +171,17 @@ int main(int argc, char **argv) {
     RUN_TEST(test_battery_manager_cell_voltage_check_error_full_2);
     RUN_TEST(test_battery_manager_cell_voltage_check_error_full_3);
     RUN_TEST(test_battery_manager_cell_voltage_check_error_full_4);
+
+    RUN_TEST(test_battery_manager_battery_temperature_check_error_low_1);
+    RUN_TEST(test_battery_manager_battery_temperature_check_error_low_2);
+    RUN_TEST(test_battery_manager_battery_temperature_check_low_1);
+    RUN_TEST(test_battery_manager_battery_temperature_check_low_2);
+    RUN_TEST(test_battery_manager_battery_temperature_check_good_1);
+    RUN_TEST(test_battery_manager_battery_temperature_check_good_2);
+    RUN_TEST(test_battery_manager_battery_temperature_check_high_1);
+    RUN_TEST(test_battery_manager_battery_temperature_check_high_2);
+    RUN_TEST(test_battery_manager_battery_temperature_check_error_high_1);
+    RUN_TEST(test_battery_manager_battery_temperature_check_error_high_2);
 
     UNITY_END();
 
