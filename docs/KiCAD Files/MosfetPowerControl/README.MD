@@ -42,11 +42,11 @@ Be aware, the physical diodes D1 and D2 were added only for demostration of in b
 
 The current control follows the following truth table.
 
-| Gate 1 | Gate 2 | Current Direction | Charing | Discharging |
+| Gate 0 | Gate 1 | Current Direction | Charing | Discharging |
 | ------ | ------ | ----------------- | ------- | ----------- |
 | 0      | 0      | None              | NA      | NA          |
-| 0      | 1      | Up to Bottom      | ON      | OFF         |
-| 1      | 0      | Bottom to Up      | OFF     | ON          |
+| 0      | 1      | Up to Bottom      | OFF     | ON          |
+| 1      | 0      | Bottom to Up      | ON      | OFF         |
 | 1      | 1      | Bidirectio        | ON      | ON          |
 
 https://www.powerelectronictips.com/remember-mosfet-body-diode-faq/
@@ -55,6 +55,7 @@ https://www.powerelectronictips.com/remember-mosfet-body-diode-faq/
 * IO current limit Resister: Ceil(3.3V / 25mA * 4) = 560R
 
 ![1697093219523](image/README/1697093219523.png)
+
 ### PCB Circuit
 
 ![1696845039316](image/README/1696845039316.png)
