@@ -2,7 +2,7 @@
 /**
  * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
- * \return The cell voltage value.
+ * \return The cell voltage value in mV.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into 0 - 4125mV.
  */
@@ -15,7 +15,7 @@ uint16_t adc_convert_cell_voltage(uint16_t (*adc_read)(const uint8_t adc_channel
 /**
  * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
- * \return The battery charging current value.
+ * \return The battery current value in mA.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into 0 - 41250mA.
  */
@@ -29,7 +29,7 @@ uint16_t adc_convert_batt_current(uint16_t adc_value) {
 /**
  * \brief Set return value for moc_adc_read().
  * \param[in] adc_read The function for reading ADC values.
- * \return The cell voltage value.
+ * \return The battery temperature in 0.1 Celcius.
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  * \details This function converts 12 bit ADC value into -50 - 150C.
  */

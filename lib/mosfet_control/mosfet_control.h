@@ -38,8 +38,8 @@
 
 #define MOSFET_CONTROL_CLOSED       0x00U
 #define MOSFET_CONTROL_OPEN         (MOSFET_CONTROL_IDR_ODR_G0 | MOSFET_CONTROL_IDR_ODR_G1)
-#define MOSFET_CONTROL_CHARGE       (MOSFET_CONTROL_IDR_ODR_G1)
-#define MOSFET_CONTROL_DISCHARGE    (MOSFET_CONTROL_IDR_ODR_G0)
+#define MOSFET_CONTROL_CHARGE       (MOSFET_CONTROL_IDR_ODR_G0)
+#define MOSFET_CONTROL_DISCHARGE    (MOSFET_CONTROL_IDR_ODR_G1)
 
 void mosfet_control_init(void);
 void mosfet_control_set(const uint32_t mosfet_control_state);

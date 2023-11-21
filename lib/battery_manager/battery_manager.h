@@ -57,17 +57,18 @@
 #define BATT_CURRENT_SAFETY_OFFSET (uint16_t)300  // Safety offset from absolute ratings.
 #define BATT_CURRENT_LOW           (uint16_t)500
 #define BATT_CURRENT_MTHRESH       (uint16_t)1300  // Max Continuous Drain–Source Diode Forward Current.
-#define BATT_CURRENT_OPTIM         (uint16_t)5000
+#define BATT_CURRENT_OPTIM         (uint16_t)5000  // Just some arbitrary number, need to set later.
 #define BATT_CURRENT_MIN           (uint16_t)0
-#define BATT_CURRENT_MAX           (uint16_t)37600
+// #define BATT_CURRENT_MAX           (uint16_t)37600  // 37400mA rating for mosfet 4*9.6
+#define BATT_CURRENT_MAX           (uint16_t)10000  // 10000mA rating for pcb
 
-BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t voltage);
+BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index, const uint16_t voltage);
 BATTERY_STATUS battery_manager_voltage_check(const uint16_t voltage);
-BATTERY_STATUS battery_manager_current_check(int32_t current);
+BATTERY_STATUS battery_manager_current_check(int16_t current);
 BATTERY_STATUS battery_manager_temperature_check(const double temperature);
 BATTERY_STATUS battery_manager_status_get(void);
 BATTERY_STATUS battery_manager_status_set(const BATTERY_STATUS status_result);
 BATTERY_STATUS battery_manager_status_overwrite(const BATTERY_STATUS      status,
                                                 const BATTERY_STATUS_MASK mask);
-void           battery_manager_management_routine(void);
+BATTERY_STATUS battery_manager_management_routine(void);
 #endif

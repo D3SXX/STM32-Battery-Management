@@ -29,25 +29,25 @@ MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
     err = modbusRtu_CrcCheck(modbus_rtu_frame);
     if (err != MODBUS_RTU_ERR_SUCCESS) {
 #if (DEBUG_CONSOLE_EN > 0u)
-        debug_console("BAD CRC!\n\r");
+        debug_console("BAD CRC!\r\n");
 #endif
         modbusRtu_ErrorReply(modbus_rtu_frame, (uint8_t)err);
         return err;
     } else {
 #if (DEBUG_CONSOLE_EN > 0u)
-        debug_console("CRC SUCCESS!\n\r");
+        debug_console("CRC SUCCESS!\r\n");
 #endif
         // Validate Function Code
         err = modbusRtu_FunctionCodeValidation(modbus_rtu_frame[FUNCTION_CODE]);
         if (MODBUS_RTU_ERR_SUCCESS != err) {
 #if (DEBUG_CONSOLE_EN > 0u)
-            debug_console("BAD FUNCTION CODE!\n\r");
+            debug_console("BAD FUNCTION CODE!\r\n");
 #endif
             modbusRtu_ErrorReply(modbus_rtu_frame, (uint8_t)err);
             return err;
         } else {
 #if (DEBUG_CONSOLE_EN > 0u)
-            debug_console("FUNCTION CODE Accepted!\n\r");
+            debug_console("FUNCTION CODE Accepted!\r\n");
 #endif
             switch (modbus_rtu_frame[FUNCTION_CODE]) {
                 case READ_DO:
@@ -83,7 +83,7 @@ MODBUS_RTU_ERR modbusRtu_ParseRequest(const uint8_t *const modbus_rtu_frame) {
             } else {
                 modbusRtu_Reply(modbus_rtu_frame, reply_data, reply_data_len);
 #if (DEBUG_CONSOLE_EN > 0u)
-                debug_console("Modbus RTU request execution successful!\n\r");
+                debug_console("Modbus RTU request execution successful!\r\n");
 #endif
             }
         }
