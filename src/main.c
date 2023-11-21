@@ -1,5 +1,6 @@
 #include "STM32L1xx_LL_Driver.h"
 #include "adc.h"
+#include "battery_manager.h"
 #include "iwdg.h"
 #include "modbus_rtu.h"
 #include "modbus_rtu_func_4.h"
@@ -10,6 +11,10 @@
 #include "timer.h"
 #include "usart_config.h"
 #include "utils.h"
+
+#if (MOC_ADC_EN > 0)
+#include "moc_adc_read.h"
+#endif
 
 #if (DEBUG_CONSOLE_EN > 0u)
 #include "stdio.h"
@@ -71,7 +76,7 @@ int main(void) {
     timer2_start(1000, 1000);
     LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_8, LL_GPIO_MODE_OUTPUT);  // config a debug pin on GPIO
 #if (DEBUG_CONSOLE_EN > 0u)
-    debug_console("App started...\n\r");
+    debug_console("App started...\r\n");
 #endif
     __enable_irq();
 
@@ -135,7 +140,7 @@ void modbus_routine(void) {
         modbusRtu_AddressValidation(usart1_rx_dma_buffer[SLAVE_ADDRESS])) {
 #if (DEBUG_CONSOLE_EN > 0u)
         char debug_msg[DBUG_MSG_LEN];
-        snprintf(debug_msg, DBUG_MSG_LEN, "SlaveAddr:%#x\n\r", usart1_rx_dma_buffer[SLAVE_ADDRESS]);
+        snprintf(debug_msg, DBUG_MSG_LEN, "SlaveAddr:%#x\r\n", usart1_rx_dma_buffer[SLAVE_ADDRESS]);
         debug_console("Not my address, discard the frame!\r\n");
 #endif
     } else {
@@ -153,86 +158,86 @@ void modbus_routine(void) {
 
 void read_current_routine(void) {
     mux_set(MUX_SEL_CH4);
-    uint16_t adc_value                      = adc_read(ADC_INPUT_BATT_CURRENT);
-    uint16_t current                        = adc_convert_batt_current(adc_value);
+    uint16_t adc_value = 0;
+    uint16_t current   = 0;
+#if (MOC_ADC_EN > 0)
+    static uint16_t moc_current_adc = 0;
+    adc_value                       = moc_current_adc;
+    moc_current_adc += 200;
+    moc_current_adc = moc_current_adc > 4095 ? 0 : moc_current_adc;
+#else
+    adc_value = adc_read(ADC_INPUT_BATT_CURRENT);
+#endif
+    current                                 = adc_convert_batt_current(adc_value);
     modbus_registers[REG_ADDR_BATT_CURRENT] = current;
-    if (current == 0) {
-        // There is no discharging current sensing yet in this project. Turn mosfet control to fully
-        // open for discharging. But no way to shutdown by discharging current. TBD - mosfet_control
-        mosfet_control_set(MOSFET_CONTROL_OPEN);
-    } else if (current < 500) {
-        // Maxium Drain-Source Diode forward current is 1300mA. Using 500mA for super safety.
-        mosfet_control_set(MOSFET_CONTROL_CHARGE);
-    } else if (current < 1000) {
-        // Fully open for charging
-        mosfet_control_set(MOSFET_CONTROL_OPEN);
-    } else if (current < 33840) {  // 10% below mosfet maximum rating of Drain Current.
-        // maybe some warning();
-    } else if (current > 37600) {  // Absolute maximum value, now discharge only
-        mosfet_contro(MOSFET_CONTROL_DISCHARGE);
-    }
+    battery_manager_current_check((int16_t)current);
     subroutine_flag &= ~ADC_READ_CURRENT;
 }
 
 void read_temperature_routine(void) {
+#if (MOC_ADC_EN > 0)
+    static uint16_t moc_temp_adc = 0;
+    moc_adc_set(moc_temp_adc);
+    moc_temp_adc += 100;
+    moc_temp_adc = moc_temp_adc > 4095 ? 0 : moc_temp_adc;
+#endif
     mux_set(MUX_SEL_CH5);
-    uint16_t temp_uint                   = adc_convert_batt_temp(adc_read);
+    uint16_t temp_uint                   = 0; 
+#if (MOC_ADC_EN > 0)
+    temp_uint = adc_convert_batt_temp(moc_adc_read);
+#else
+    temp_uint = adc_convert_batt_temp(adc_read);
+#endif
     modbus_registers[REG_ADDR_BATT_TEMP] = temp_uint;
-    double temp_double                   = (double)(int)temp_uint;
-    if (temp_double > 60.0) {
-        // Dangerous condition shutdown battery
-        mosfet_control_set(MOSFET_CONTROL_CLOSED);
-    } else {
-        // mosfet_control(MOSFET_PREVIOUS_STATE);
-    }
+    int16_t temp_int = (int16_t)temp_uint;
+    double temp_double                   = (double)temp_int/10.0;
+    battery_manager_temperature_check(temp_double);
     subroutine_flag &= ~ADC_READ_TEMPERATURE;
 }
 
 void read_cell_voltage_routine(void) {
+#if (MOC_ADC_EN > 0)
+    static uint16_t moc_volt_adc = 0;
+    moc_adc_set(moc_volt_adc);
+    moc_volt_adc += 100;
+    moc_volt_adc = moc_volt_adc > 4095 ? 0 : moc_volt_adc;
+#endif
     mux_set(MUX_SEL_CH0);
-    uint16_t voltage                      = adc_convert_cell_voltage(adc_read);
+    uint16_t voltage = 0;
+#if (MOC_ADC_EN > 0)
+        voltage = adc_convert_cell_voltage(moc_adc_read);
+#else
+        voltage = adc_convert_cell_voltage(adc_read);
+#endif
     modbus_registers[REG_ADDR_CELL1_VOLT] = voltage;
-    if (voltage <= 2500) {
-        // Battery empty
-        // stm32_go_sleep();
-        // Wakeup by ADC, Timer(once per hour to check)?
-    } else if (voltage <= 3280) {
-        // Battery 40% charging again
-        mosfet_control_set(MOSFET_CONTROL_CHARGE);
-    } else if (voltage >= 3650) {
-        // Battery Full
-        mosfet_control_set(MOSFET_CONTROL_CLOSED);
-    }
+    battery_manager_cell_voltage_check(0, voltage);
 
     mux_set(MUX_SEL_CH1);
-    voltage                               = adc_convert_cell_voltage(adc_read);
+#if (MOC_ADC_EN > 0)
+        voltage = adc_convert_cell_voltage(moc_adc_read);
+#else
+        voltage = adc_convert_cell_voltage(adc_read);
+#endif
     modbus_registers[REG_ADDR_CELL2_VOLT] = voltage;
-    if (voltage <= 2600) {
-        // stm32_sleep();
-    }
-    if (voltage >= 3330) {
-        // mosfet_control(MOSFET_SHUT_DOWN);
-    }
+    battery_manager_cell_voltage_check(1, voltage);
 
     mux_set(MUX_SEL_CH2);
-    voltage                               = adc_convert_cell_voltage(adc_read);
+#if (MOC_ADC_EN > 0)
+        voltage = adc_convert_cell_voltage(moc_adc_read);
+#else
+        voltage = adc_convert_cell_voltage(adc_read);
+#endif
     modbus_registers[REG_ADDR_CELL3_VOLT] = voltage;
-    if (voltage <= 2600) {
-        // stm32_sleep();
-    }
-    if (voltage >= 3330) {
-        // mosfet_control(MOSFET_SHUT_DOWN);
-    }
+    battery_manager_cell_voltage_check(2, voltage);
 
     mux_set(MUX_SEL_CH3);
-    voltage                               = adc_convert_cell_voltage(adc_read);
+#if (MOC_ADC_EN > 0)
+        voltage = adc_convert_cell_voltage(moc_adc_read);
+#else
+        voltage = adc_convert_cell_voltage(adc_read);
+#endif
     modbus_registers[REG_ADDR_CELL4_VOLT] = voltage;
-    if (voltage <= 2600) {
-        // stm32_sleep();
-    }
-    if (voltage >= 3330) {
-        // mosfet_control(MOSFET_SHUT_DOWN);
-    }
+    battery_manager_cell_voltage_check(3, voltage);
     subroutine_flag &= ~ADC_READ_VOLTS;
 }
 
@@ -291,8 +296,8 @@ void USART1_IRQHandler(void) {
 #if (DEBUG_CONSOLE_EN > 0u)
             debug_console(
                 "Error!"
-                "IDLE line detected, but dma transmition complete flag is FALSE!\n\r"
-                "Received modbus frame length is lesser than expected.\n\r");
+                "IDLE line detected, but dma transmition complete flag is FALSE!\r\n"
+                "Received modbus frame length is lesser than expected.\r\n");
 #endif
         }
     }
