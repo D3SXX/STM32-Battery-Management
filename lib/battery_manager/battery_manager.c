@@ -5,6 +5,7 @@
 #if (DEBUG_CONSOLE_EN > 0u)
 #include "stdio.h"
 #include "utils.h"
+char message[128] = {0};
 #endif
 
 BATTERY_STATUS battery_status = BATT_STAT_GOOD;
@@ -17,9 +18,6 @@ BATTERY_STATUS battery_status = BATT_STAT_GOOD;
  */
 BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index,
                                                   const uint16_t voltage) {
-#if (DEBUG_CONSOLE_EN > 0u)
-    char message[64] = {0};
-#endif
     BATTERY_STATUS result = BATT_STAT_GOOD;
     if (voltage <= BATT_CELL_VOLT_MIN) {
 #ifndef TEST_NATIVE
@@ -60,7 +58,7 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index,
         } else {
             result = (BATT_STAT_GOOD | BATT_STAT_VOLT_FULL);
 #if (DEBUG_CONSOLE_EN > 0u)
-            sprintf(message, "Debug! Cell %u none charging voltage full.\r\n", cell_index);
+            sprintf(message, "Debug! Cell %u none-charging voltage full.\r\n", cell_index);
             debug_console(message);
 #endif
         }
@@ -79,7 +77,7 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index,
 #endif
             result = (BATT_STAT_ERROR | BATT_STAT_VOLT_FULL);
 #if (DEBUG_CONSOLE_EN > 0u)
-            sprintf(message, "Error! Cell %u none charging voltage too high.\r\n", cell_index);
+            sprintf(message, "Error! Cell %u none-charging voltage too high.\r\n", cell_index);
             debug_console(message);
 #endif
         }
@@ -98,7 +96,7 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index,
 #endif
             result = (BATT_STAT_ERROR | BATT_STAT_VOLT_FULL);
 #if (DEBUG_CONSOLE_EN > 0u)
-            sprintf(message, "Error! Cell %u none charging voltage too high.\r\n", cell_index);
+            sprintf(message, "Error! Cell %u none-charging voltage too high.\r\n", cell_index);
             debug_console(message);
 #endif
         }
@@ -130,9 +128,6 @@ BATTERY_STATUS battery_manager_cell_voltage_check(const uint16_t cell_index,
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  */
 BATTERY_STATUS battery_manager_current_check(int16_t current) {
-#if (DEBUG_CONSOLE_EN > 0u)
-    char message[64] = {0};
-#endif
     BATTERY_STATUS result = BATT_STAT_GOOD;
     if (current == BATT_CURRENT_MIN) {
         result = (BATT_STAT_GOOD | BATT_STAT_REST);
@@ -209,7 +204,8 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
     }
     battery_manager_status_overwrite(result, BATT_STAT_CURRENT_MASK);
 #if (DEBUG_CONSOLE_EN > 0u)
-    sprintf(message, "Debug! Battery Current: %umA Battery status: 0x%lx\r\n", current, battery_status);
+    sprintf(message, "Debug! Battery Current: %umA Battery status: 0x%lx\r\n", current,
+            battery_status);
     debug_console(message);
 #endif
     return result;
@@ -222,9 +218,6 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  */
 BATTERY_STATUS battery_manager_temperature_check(const double temperature) {
-#if (DEBUG_CONSOLE_EN > 0u)
-    char message[64] = {0};
-#endif
     BATTERY_STATUS result = BATT_STAT_GOOD;
     if (temperature <= BATT_TEMPERATURE_MIN) {
 #ifndef TEST_NATIVE
@@ -279,7 +272,8 @@ BATTERY_STATUS battery_manager_temperature_check(const double temperature) {
     }
     battery_manager_status_overwrite(result, BATT_STAT_TEMPERATURE_MASK);
 #if (DEBUG_CONSOLE_EN > 0u)
-    sprintf(message, "Debug! Battery temperature: %dC Battery status: 0x%lx\r\n", (int)temperature, battery_status);
+    sprintf(message, "Debug! Battery temperature: %dC Battery status: 0x%lx\r\n", (int)temperature,
+            battery_status);
     debug_console(message);
 #endif
     return result;
@@ -337,6 +331,7 @@ BATTERY_STATUS battery_manager_status_get(void) { return battery_status; }
  * \author siyuan xu, e2101066@edu.vamk.fi, Nov.2023
  */
 BATTERY_STATUS battery_manager_management_routine(void) {
+    uint32_t result = 0;
     switch (battery_status) {
         case (BATT_STAT_ERROR | BATT_STAT_CHARGING | BATT_STAT_CURRENT_HIGH):
             mosfet_control_set(MOSFET_CONTROL_CLOSED);
@@ -384,4 +379,5 @@ BATTERY_STATUS battery_manager_management_routine(void) {
         default:
             break;
     }
+    return result;
 }
