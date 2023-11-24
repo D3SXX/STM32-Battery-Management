@@ -12,11 +12,9 @@
 
 /*User settings*/
 #define ADC_INPUT_BATT_CURRENT  PA0
-#define ADC_INPUT_BATT_TEMP     PA0
 #define ADC_INPUT_CELL_VOLTAGE  PA0
-#define PIN_CURRENT             1
-#define PIN_TEMP                2
-#define PIN_VOLT                3
+#define ADC_INPUT_BATT_TEMP_P   PA1
+#define ADC_INPUT_BATT_TEMP_N   PA4
 
 #define LM35_VOLT_REF           (double)1.0
 #define LM35_VOLT_MAX           (double)(LM35_VOLT_REF + 1.5)

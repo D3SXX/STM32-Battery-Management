@@ -102,7 +102,6 @@ int main(void) {
             DMA1_Channel15_Reload();
             subroutine_flag &= ~DMA1_ERROR;  // Reset DMA1_ERROR
         }
-        // delay_ms(1000);
         // LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
     }
 }
@@ -157,14 +156,14 @@ void modbus_routine(void) {
 }
 
 void read_current_routine(void) {
-    mux_set(MUX_SEL_CH4);
+    mux_set(MUX_SEL_CURRENT);
     uint16_t adc_value = 0;
     uint16_t current   = 0;
 #if (MOC_ADC_EN > 0)
     static uint16_t moc_current_adc = 0;
     adc_value                       = moc_current_adc;
     moc_current_adc += 200;
-    moc_current_adc = moc_current_adc > 4095 ? 0 : moc_current_adc;
+    moc_current_adc = moc_current_adc > 990 ? 0 : moc_current_adc;
 #else
     adc_value = adc_read(ADC_INPUT_BATT_CURRENT);
 #endif
@@ -181,60 +180,70 @@ void read_temperature_routine(void) {
     moc_temp_adc += 100;
     moc_temp_adc = moc_temp_adc > 4095 ? 0 : moc_temp_adc;
 #endif
-    mux_set(MUX_SEL_CH5);
-    uint16_t temp_uint                   = 0; 
+    int16_t  temp_int = 0;
+    uint16_t temp_pos = 0;
+    uint16_t temp_neg = 0;
 #if (MOC_ADC_EN > 0)
-    temp_uint = adc_convert_batt_temp(moc_adc_read);
+    temp_int = adc_convert_batt_temp(moc_adc_read(0));
 #else
-    temp_uint = adc_convert_batt_temp(adc_read);
+    temp_pos = adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_P));
+    temp_neg = adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_N));
+    temp_int = temp_pos - temp_neg;
 #endif
-    modbus_registers[REG_ADDR_BATT_TEMP] = temp_uint;
-    int16_t temp_int = (int16_t)temp_uint;
-    double temp_double                   = (double)temp_int/10.0;
+    modbus_registers[REG_ADDR_BATT_TEMP] =
+        (uint16_t)temp_int;  // explicitly convert int16_t to uint16_t. Modbus client should convert
+                             // it back to int16_t
+    double temp_double = (double)temp_int / 10.0;
     battery_manager_temperature_check(temp_double);
     subroutine_flag &= ~ADC_READ_TEMPERATURE;
 }
 
 void read_cell_voltage_routine(void) {
 #if (MOC_ADC_EN > 0)
-    static uint16_t moc_volt_adc = 0;
+    static uint16_t moc_volt_adc = 2900;
     moc_adc_set(moc_volt_adc);
     moc_volt_adc += 100;
-    moc_volt_adc = moc_volt_adc > 4095 ? 0 : moc_volt_adc;
+    moc_volt_adc = moc_volt_adc > 4095 ? 2980 : moc_volt_adc;
 #endif
-    mux_set(MUX_SEL_CH0);
-    uint16_t voltage = 0;
+    mux_set(MUX_SEL_CELL1);
+    uint16_t voltage   = 0;
+    uint16_t adc_value = 0;
 #if (MOC_ADC_EN > 0)
-        voltage = adc_convert_cell_voltage(moc_adc_read);
+    voltage = adc_convert_cell_voltage(moc_adc_read(1));
 #else
-        voltage = adc_convert_cell_voltage(adc_read);
+    adc_value = adc_read(ADC_INPUT_CELL_VOLTAGE);
+    adc_value = adc_read(ADC_INPUT_CELL_VOLTAGE);
+    voltage   = adc_convert_cell_voltage(adc_value);
 #endif
     modbus_registers[REG_ADDR_CELL1_VOLT] = voltage;
     battery_manager_cell_voltage_check(0, voltage);
 
-    mux_set(MUX_SEL_CH1);
+    mux_set(MUX_SEL_CELL2);
 #if (MOC_ADC_EN > 0)
-        voltage = adc_convert_cell_voltage(moc_adc_read);
+    voltage = adc_convert_cell_voltage(moc_adc_read(2));
 #else
-        voltage = adc_convert_cell_voltage(adc_read);
+    adc_value = adc_read(ADC_INPUT_CELL_VOLTAGE);
+    voltage   = adc_convert_cell_voltage(adc_value);
 #endif
     modbus_registers[REG_ADDR_CELL2_VOLT] = voltage;
     battery_manager_cell_voltage_check(1, voltage);
 
-    mux_set(MUX_SEL_CH2);
+    mux_set(MUX_SEL_CELL3);
 #if (MOC_ADC_EN > 0)
-        voltage = adc_convert_cell_voltage(moc_adc_read);
+    voltage = adc_convert_cell_voltage(moc_adc_read(3));
 #else
-        voltage = adc_convert_cell_voltage(adc_read);
+    adc_value = adc_read(ADC_INPUT_CELL_VOLTAGE);
+    voltage   = adc_convert_cell_voltage(adc_value);
 #endif
     modbus_registers[REG_ADDR_CELL3_VOLT] = voltage;
     battery_manager_cell_voltage_check(2, voltage);
 
-    mux_set(MUX_SEL_CH3);
+    mux_set(MUX_SEL_CELL4);
 #if (MOC_ADC_EN > 0)
-        voltage = adc_convert_cell_voltage(moc_adc_read);
+    voltage = adc_convert_cell_voltage(moc_adc_read(4));
 #else
-        voltage = adc_convert_cell_voltage(adc_read);
+    adc_value = adc_read(ADC_INPUT_CELL_VOLTAGE);
+    voltage   = adc_convert_cell_voltage(adc_value);
 #endif
     modbus_registers[REG_ADDR_CELL4_VOLT] = voltage;
     battery_manager_cell_voltage_check(3, voltage);

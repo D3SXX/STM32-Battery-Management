@@ -56,7 +56,7 @@ void test_mosfet_control_set_charge(void) {
     mosfet_control_set(MOSFET_CONTROL_CHARGE);
     // HAL_Delay(1000);
     uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
-    TEST_ASSERT_EQUAL(0x400, gpiob_status);
+    TEST_ASSERT_EQUAL(0x40, gpiob_status);
     // TEST_FAIL_MESSAGE("Not Implemented.");
     mosfet_control_reset();
     // HAL_Delay(1000);
@@ -66,7 +66,7 @@ void test_mosfet_control_set_discharge(void) {
     mosfet_control_set(MOSFET_CONTROL_DISCHARGE);
     // HAL_Delay(1000);
     uint32_t gpiob_status = ((GPIOB->IDR) & (MOSFET_CONTROL_IDR_ODR_MASK));
-    TEST_ASSERT_EQUAL(0x40, gpiob_status);
+    TEST_ASSERT_EQUAL(0x400, gpiob_status);
     // TEST_FAIL_MESSAGE("Not Implemented.");
     mosfet_control_reset();
     // HAL_Delay(1000);
