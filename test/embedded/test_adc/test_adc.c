@@ -54,57 +54,65 @@ void test_adc_convert_batt_current_edge_min(void) {
 void test_adc_convert_cell_voltage_positive(void) {
     uint16_t volta = 0;
     moc_adc_set(3623);
-    volta = adc_convert_cell_voltage(moc_adc_read);
+    uint16_t adc_value = moc_adc_read(0);
+    volta = adc_convert_cell_voltage(adc_value);
     TEST_ASSERT_EQUAL((uint16_t)3649, volta);
 }
 
 void test_adc_convert_cell_voltage_negatitive(void) {
     uint16_t volta = 0;
     moc_adc_set(3624);
-    volta = adc_convert_cell_voltage(moc_adc_read);
+    uint16_t adc_value = moc_adc_read(0);
+    volta = adc_convert_cell_voltage(adc_value);
     TEST_ASSERT_NOT_EQUAL((uint16_t)3649, volta);
 }
 
 void test_adc_convert_cell_voltage_edge_max(void) {
     uint16_t volta = 0;
     moc_adc_set(4095);
-    volta = adc_convert_cell_voltage(moc_adc_read);
+    uint16_t adc_value = moc_adc_read(0);
+    volta = adc_convert_cell_voltage(adc_value);
     TEST_ASSERT_EQUAL((uint16_t)4125, volta);
 }
 
 void test_adc_convert_cell_voltage_edge_min(void) {
     uint16_t volta = 0;
     moc_adc_set(4095);
-    volta = adc_convert_cell_voltage(moc_adc_read);
+    uint16_t adc_value = moc_adc_read(0);
+    volta = adc_convert_cell_voltage(adc_value);
     TEST_ASSERT_EQUAL((uint16_t)4125, volta);
 }
 
-void test_adc_convert_temperature_positive(void){
-    int16_t temp_int = 0;
-    moc_adc_set(LM35_ADC_REF);
-    temp_int = (int16_t)adc_convert_batt_temp(moc_adc_read);
-    TEST_ASSERT_EQUAL((int16_t)0, temp_int);
+void test_adc_convert_temperature_positive(void) {
+    uint16_t temp_int = 0;
+    moc_adc_set(1241);
+    uint16_t adc_value = moc_adc_read(0);
+    temp_int = adc_convert_batt_temp(adc_value);
+    TEST_ASSERT_EQUAL(1000, temp_int);
 }
 
-void test_adc_convert_temperature_negative(void){
-    int16_t temp_int = 0;
-    moc_adc_set(LM35_ADC_REF - 10);
-    temp_int = (int16_t)adc_convert_batt_temp(moc_adc_read);
-    TEST_ASSERT_NOT_EQUAL((int16_t)0, temp_int);
+void test_adc_convert_temperature_negative(void) {
+    uint16_t temp_int = 0;
+    moc_adc_set(1240);
+    uint16_t adc_value = moc_adc_read(0);
+    temp_int = adc_convert_batt_temp(adc_value);
+    TEST_ASSERT_NOT_EQUAL(1000, temp_int);
 }
 
-void test_adc_convert_temperature_edge_max(void){
-    int16_t temp_int = 0;
-    moc_adc_set(LM35_ADC_MAX);
-    temp_int = (int16_t)adc_convert_batt_temp(moc_adc_read);
-    TEST_ASSERT_EQUAL((int16_t)1500, temp_int);
+void test_adc_convert_temperature_edge_max(void) {
+    uint16_t temp_int = 0;
+    moc_adc_set(4095);
+    uint16_t adc_value = moc_adc_read(0);
+    temp_int = adc_convert_batt_temp(adc_value);
+    TEST_ASSERT_EQUAL(3300, temp_int);
 }
 
-void test_adc_convert_temperature_edge_min(void){
-    int16_t temp_int = 0;
-    moc_adc_set(LM35_ADC_MIN);
-    temp_int = (int16_t)adc_convert_batt_temp(moc_adc_read);
-    TEST_ASSERT_EQUAL((int16_t)-549, temp_int);
+void test_adc_convert_temperature_edge_min(void) {
+    uint16_t temp_int = 0;
+    moc_adc_set(0);
+    uint16_t adc_value = moc_adc_read(0);
+    temp_int = adc_convert_batt_temp(adc_value);
+    TEST_ASSERT_EQUAL(0, temp_int);
 }
 
 static inline void LED2_init(void) {
