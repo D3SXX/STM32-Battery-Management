@@ -26,8 +26,8 @@ void adc_init(void) {
     */
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;              // Enable GPIOA
     GPIOA->MODER |= (GPIO_MODE_ANALOG << PA0 * 2);  // Set PA0 to ANALOG mode
-    // GPIOA->MODER |= (GPIO_MODE_ANALOG << PA1 * 2);
-    // GPIOA->MODER |= (GPIO_MODE_ANALOG << PA4 * 2);
+    GPIOA->MODER |= (GPIO_MODE_ANALOG << PA1 * 2);  // Set PA1 to ANALOG mode
+    GPIOA->MODER |= (GPIO_MODE_ANALOG << PA4 * 2);  // Set PA4 to ANALOG mode
 
     RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  // Enable GPIOC
     GPIOB->MODER |= (GPIO_MODE_ANALOG << PC1 * 2);

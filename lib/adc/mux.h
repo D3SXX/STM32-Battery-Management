@@ -50,6 +50,12 @@
 #define MUX_SEL_CH6      (MUX_IDR_ODR_B | MUX_IDR_ODR_C)
 #define MUX_SEL_CH7      (MUX_IDR_ODR_A | MUX_IDR_ODR_B | MUX_IDR_ODR_C)
 
+#define MUX_SEL_CELL1    MUX_SEL_CH0
+#define MUX_SEL_CELL2    MUX_SEL_CH1
+#define MUX_SEL_CELL3    MUX_SEL_CH2
+#define MUX_SEL_CELL4    MUX_SEL_CH3
+#define MUX_SEL_CURRENT  MUX_SEL_CH4
+
 void mux_init(void);
 void mux_set(const uint32_t mux_channel);
 void mux_reset(void);
