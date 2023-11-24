@@ -90,7 +90,8 @@ while True:
     startRegisterAddress = startRegisterAddress + 1
     print(f"{battery_current.name}: {battery_current.v} {battery_current.unit}")
 
-    temperature_uint16 = modbus_read_input_register(startRegisterAddress)
+    temperature_int = modbus_read_input_register(startRegisterAddress)
+    temperature_uint16 = np.uint16(temperature_int)
     temperature_int16 = np.int16(temperature_uint16)
     temperature_double = temperature_int16 / 10
 
@@ -113,5 +114,5 @@ while True:
     # current = 2.5 if current >= 40 else current
     # temperature = -20.5 if temperature >= 50 else temperature
 
-    print("sleeping 3s...")
-    time.sleep(3)
+    print("sleeping 5s...")
+    time.sleep(5)
