@@ -1,4 +1,4 @@
-/* Authors : Vladislav R., Date : 23.11.2023 
+/* Authors : Vladislav R., Date : 24.11.2023 
 Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
 
 This code here showcases: 
@@ -9,13 +9,11 @@ Manipulation of CD4051BE multiplexer
 Measuring Negative and Positive temperature using lm35 
 
 Changes:
-Data for lm35 now is collected using A1 and A2 instead of using mux
-Cleaned code (removed unused variables, old comments)
-Added support for A2 input
-Fixed a bug in find_median() (out of bounds)
-Added correct limits for Mux and Lm35 (2.4V for Mux and 1.5 for lm35)
-Reversed C and A in mux_read()
-
+Fixed A2 pin input
+Fixed USART output for Mux
+Added decimal point for temperature measurement
+Removed useless Temp calculations from mux USART output 
+Limited channels to 4
 
 Notes:
 Connect Multiplexer A, B and C to the pins D3, D4 and D5
@@ -139,19 +137,37 @@ int main(void)
 		int original_voltage = voltage_mux / 0.8; // Original Voltage before the gain (about -0.8)
 
 		if (check_mux)
-			sprintf(buf,"CH%d_ADC=%d CH%d_Volt = %d CH%d_0.8x Volt=%dmV CH%d_Temp=%dC",channel-1,adc_mux,channel-1,original_voltage,channel-1,volt_integer,channel-1,temp_voltage/10);
+			sprintf(buf,"CH%d_ADC=%d CH%d_Volt = %d CH%d_0.8x Volt=%dmV",channel-1,adc_mux,channel-1,original_voltage,channel-1,volt_integer);
 		else
 			sprintf(buf,"MUX - The voltage is too low");
 
-		float voltage_lm35 = adc_mux * (3.3/4095);
-		int temp_lm35 = voltage_lm35 * 100;
+	  	int len=0;
+		while(buf[len]!='\0')
+		{
+			len++;
+		}
 
+		/*Transmit each element*/
+		for(int i=0;i<len;i++)
+		{
+			USART2_write(buf[i]);
+		}
+
+		/*Start new line*/
+		USART2_write('\n');
+		USART2_write('\r');
+
+
+
+		float voltage_lm35 = adc_lm35 * (3.3/4095) * 1000;
+		int temp_lm35 = voltage_lm35;
+		int decimal_lm35 = (voltage_lm35 - temp_lm35) * 10;
 		if(check_lm35)
-			sprintf(buf,"lm35_temp - %d",temp_lm35);
+			sprintf(buf,"lm35_temp - %d.%dC",temp_lm35/10,abs(decimal_lm35));
 		else
 			sprintf(buf,"LM35 - The voltage is too high");
 		/*Get size of the buf*/
-	  	int len=0;
+	  	len=0;
 		while(buf[len]!='\0')
 		{
 			len++;
@@ -207,7 +223,7 @@ int read_adc_A1(void)
 
 void adc_a2_config(void){
 	/*Configure ADC*/
-	LL_ADC_REG_SetSequencerRanks(ADC1,LL_ADC_REG_RANK_1,LL_ADC_CHANNEL_2); // Specify the sequence of channels for ADC1	(make channel 1 to be the first in sequence)
+	LL_ADC_REG_SetSequencerRanks(ADC1,LL_ADC_REG_RANK_1,LL_ADC_CHANNEL_4); // Specify the sequence of channels for ADC1	(make channel 1 to be the first in sequence)
 	LL_ADC_Enable(ADC1); // Enable ADC1
 	LL_ADC_REG_StartConversionSWStart(ADC1); // Start conversion using Software Trigger
 }
@@ -291,11 +307,11 @@ int find_median(int arr[],int len){
 
 
 
-bool mux_read (int *chan, uint32_t A,uint32_t B,uint32_t C, int *data){ // Possibly need to change A and C  
+bool mux_read (int *chan, uint32_t A,uint32_t B,uint32_t C, int *data){ 
 // Modify a value thru pointer, return Bool
 int read_times = 5;  // Specify the amount of reads
 int adc_values[read_times];
-if(*chan > 7) *chan = 0;
+if(*chan > 3) *chan = 0;
 switch (*chan) // C B A
 {
 case 0: // 0 0 0
@@ -348,7 +364,7 @@ default: // 0 0 0
 	/*Read channels read_times times*/
 	adc_a0_config(); // Configure ADC only once when starting the readings
 	for(int k=0;k<read_times-1;k++)
-	{
+	{ 
 			adc_values[k] = read_adc_A0(); // Read A0 and record its output to an array
 			LL_mDelay(1); // 1 ms delay for each reading
 	}
@@ -357,25 +373,27 @@ default: // 0 0 0
 	if(*chan <= 7)
 		(*chan)++;
 	/*Example of implementing False*/
-	if (*chan < 4 && *data < 2382) return false; // We check_mux if channels 0-3 have voltage over 1.92 Volts (2.4 Volts * 0.8 gain)
+	//if (*chan < 4 && *data < 2382) return false; // We check_mux if channels 0-3 have voltage over 1.92 Volts (2.4 Volts * 0.8 gain)
 
     return true;
 }
 bool lm35_read(int *data){
 	int read_times = 5;
 	int adc_values[read_times];
+	int positive_v,negative_v;
 	for(int i = 0; i<read_times-1;i++){
 		adc_a1_config();
 		LL_mDelay(5);
-		int positive_v = read_adc_A1();
+		positive_v = read_adc_A1();
 		adc_a2_config();
 		LL_mDelay(5);
-		int negative_v = read_adc_A2();
+		negative_v = read_adc_A2();
 		adc_values[i] = positive_v-negative_v;
 		LL_mDelay(5);
 	}
 	*data = find_median(adc_values, read_times);
-	if(*data > 1861) return false;
+	/*Example of implementing False*/
+	///if(*data > 1861) return false;
 
 	return true;
 }
