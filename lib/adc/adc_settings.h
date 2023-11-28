@@ -16,6 +16,10 @@
 #define ADC_INPUT_BATT_TEMP_P   PA1
 #define ADC_INPUT_BATT_TEMP_N   PA4
 
+#define ADC_VOLT_MAX            (double)4.125
+#define ADC_TEMP_MAX            (double)330
+#define ADC_CURRENT_MAX         (double)41.25   //Need to be measured.
+
 #define LM35_VOLT_REF           (double)1.0
 #define LM35_VOLT_MAX           (double)(LM35_VOLT_REF + 1.5)
 #define LM35_VOLT_MIN           (double)(LM35_VOLT_REF - 0.55)
