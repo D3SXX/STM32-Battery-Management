@@ -50,9 +50,9 @@
 #define BATT_CELL_VOLT_HIGH         (uint16_t)3330  // 90%
 /* Temperature ratings in Celcius Degrees */
 #define BATT_TEMPERATURE_MIN  (float)-20.0
-#define BATT_TEMPERATURE_MAX  (float)60.0
+#define BATT_TEMPERATURE_MAX  (float)40.0
 #define BATT_TEMPERATURE_LOW  (float)0.0
-#define BATT_TEMPERATURE_HIGH (float)45.0
+#define BATT_TEMPERATURE_HIGH (float)30.0
 /* Current ratings in mA */
 #define BATT_CURRENT_SAFETY_OFFSET (uint16_t)300  // Safety offset from absolute ratings.
 #define BATT_CURRENT_LOW           (uint16_t)500

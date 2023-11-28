@@ -138,7 +138,7 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
             current = 0 - current;  // flip the sign for easier
                                     // No Discharging circuit yet. Have to fully open mosfets.
 #ifndef TEST_NATIVE
-            if (!(BATT_STAT_ERROR & battery_status)) {
+            if (!((BATT_STAT_ERROR | BATT_STAT_TEMP_LOW) & battery_status)) {
                 mosfet_control_set(MOSFET_CONTROL_OPEN);
             }
 #endif
@@ -152,7 +152,7 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
             /* Check for low, high, mthresh, optim */
             if (current < BATT_CURRENT_MTHRESH - BATT_CURRENT_SAFETY_OFFSET) {
 #ifndef TEST_NATIVE
-                if (!(BATT_STAT_ERROR & battery_status)) {
+                if (!((BATT_STAT_ERROR | BATT_STAT_TEMP_LOW) & battery_status)) {
                     mosfet_control_set(MOSFET_CONTROL_CHARGE);
                 }
 #endif
@@ -162,7 +162,7 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
 #endif
             } else if (current < BATT_CURRENT_OPTIM) {
 #ifndef TEST_NATIVE
-                if (!(BATT_STAT_ERROR & battery_status)) {
+                if (!((BATT_STAT_ERROR | BATT_STAT_TEMP_LOW) & battery_status)) {
                     mosfet_control_set(MOSFET_CONTROL_OPEN);
                 }
 #endif
@@ -173,7 +173,7 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
 #endif
             } else if (current < BATT_CURRENT_MAX - BATT_CURRENT_SAFETY_OFFSET) {
 #ifndef TEST_NATIVE
-                if (!(BATT_STAT_ERROR & battery_status)) {
+                if (!((BATT_STAT_ERROR | BATT_STAT_TEMP_LOW) & battery_status)) {
                     mosfet_control_set(MOSFET_CONTROL_OPEN);
                 }
 #endif
@@ -183,7 +183,7 @@ BATTERY_STATUS battery_manager_current_check(int16_t current) {
 #endif
             } else if (current < BATT_CURRENT_MAX) {
 #ifndef TEST_NATIVE
-                if (!(BATT_STAT_ERROR & battery_status)) {
+                if (!((BATT_STAT_ERROR | BATT_STAT_TEMP_LOW) & battery_status)) {
                     mosfet_control_set(MOSFET_CONTROL_OPEN);
                 }
 #endif
@@ -221,49 +221,30 @@ BATTERY_STATUS battery_manager_temperature_check(const double temperature) {
     BATTERY_STATUS result = BATT_STAT_GOOD;
     if (temperature <= BATT_TEMPERATURE_MIN) {
 #ifndef TEST_NATIVE
-        if (!(BATT_STAT_ERROR & battery_status)) {
-            mosfet_control_set(MOSFET_CONTROL_CLOSED);
-        }
+        mosfet_control_set(MOSFET_CONTROL_CLOSED);
 #endif
         result = (BATT_STAT_ERROR | BATT_STAT_TEMP_LOW);
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("Error! Battery temperature is too low. Battery disabled.\r\n");
 #endif
     } else if (temperature <= BATT_TEMPERATURE_LOW) {
-#ifndef TEST_NATIVE
-        if (!(BATT_STAT_ERROR & battery_status)) {
-            mosfet_control_set(MOSFET_CONTROL_OPEN);
-        }
-#endif
         result = (BATT_STAT_GOOD | BATT_STAT_TEMP_LOW);
 #if (DEBUG_CONSOLE_EN > 0u)
-        debug_console("Warning! Battery temperature is low.\r\n");
+        debug_console("Warning! Battery temperature is low. Charging disabled.\r\n");
 #endif
     } else if (temperature < BATT_TEMPERATURE_HIGH) {
-#ifndef TEST_NATIVE
-        if (!(BATT_STAT_ERROR & battery_status)) {
-            mosfet_control_set(MOSFET_CONTROL_OPEN);
-        }
-#endif
         result = (BATT_STAT_GOOD | BATT_STAT_TEMP_OPTIM);
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("Debug! Battery temperature is optimum.\r\n");
 #endif
     } else if (temperature < BATT_TEMPERATURE_MAX) {
-#ifndef TEST_NATIVE
-        if (!(BATT_STAT_ERROR & battery_status)) {
-            mosfet_control_set(MOSFET_CONTROL_OPEN);
-        }
-#endif
         result = (BATT_STAT_GOOD | BATT_STAT_TEMP_HIGH);
 #if (DEBUG_CONSOLE_EN > 0u)
         debug_console("Warning! Battery temperature is high.\r\n");
 #endif
     } else {
 #ifndef TEST_NATIVE
-        if (!(BATT_STAT_ERROR & battery_status)) {
-            mosfet_control_set(MOSFET_CONTROL_OPEN);
-        }
+        mosfet_control_set(MOSFET_CONTROL_CLOSED);
 #endif
         result = (BATT_STAT_ERROR | BATT_STAT_TEMP_HIGH);
 #if (DEBUG_CONSOLE_EN > 0u)
