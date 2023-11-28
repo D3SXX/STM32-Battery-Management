@@ -225,13 +225,21 @@ BATTERY_STATUS battery_manager_temperature_check(const double temperature) {
 #endif
         result = (BATT_STAT_ERROR | BATT_STAT_TEMP_LOW);
 #if (DEBUG_CONSOLE_EN > 0u)
-        debug_console("Error! Battery temperature is too low. Battery disabled.\r\n");
+        debug_console("Error! Battery temperature is too low for operating. Battery disabled.\r\n");
 #endif
     } else if (temperature <= BATT_TEMPERATURE_LOW) {
-        result = (BATT_STAT_GOOD | BATT_STAT_TEMP_LOW);
+        if (BATT_STAT_CHARGING & battery_status) {
+            mosfet_control_set(MOSFET_CONTROL_DISCHARGE);
+            result = (BATT_STAT_ERROR | BATT_STAT_TEMP_LOW);
 #if (DEBUG_CONSOLE_EN > 0u)
-        debug_console("Warning! Battery temperature is low. Charging disabled.\r\n");
+            debug_console("Error! Battery temperature is too low for charging. Charging disabled.\r\n");
 #endif
+        } else {  // not charging
+            result = (BATT_STAT_GOOD | BATT_STAT_TEMP_LOW);
+#if (DEBUG_CONSOLE_EN > 0u)
+            debug_console("Warning! Battery temperature is low. Charging disabled.\r\n");
+#endif
+        }
     } else if (temperature < BATT_TEMPERATURE_HIGH) {
         result = (BATT_STAT_GOOD | BATT_STAT_TEMP_OPTIM);
 #if (DEBUG_CONSOLE_EN > 0u)
