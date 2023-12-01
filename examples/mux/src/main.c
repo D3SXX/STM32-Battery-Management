@@ -1,23 +1,22 @@
-/* Authors : Vladislav R., Date : 24.11.2023 
+/* Authors : Vladislav R., Sergiu Petrut, Date : 29.11.2023 
 Description: This is modified lm35-LL-v2 code that works using CD4051BE multiplexer
 
 This code here showcases: 
 Reading ADC values for Analog input A0, A1 and A3 with LL
 Using USART with LL 
 Using GPIO with LL (output using pins D3,D4,D5)
+Controlling Mosfet using pins D11 and D12
 Manipulation of CD4051BE multiplexer
 Measuring Negative and Positive temperature using lm35 
 
 Changes:
-Fixed A2 pin input
-Fixed USART output for Mux
-Added decimal point for temperature measurement
-Removed useless Temp calculations from mux USART output 
-Limited channels to 4
+Added Mosfet control logic
+Added battery states
 
 Notes:
 Connect Multiplexer A, B and C to the pins D3, D4 and D5
 Connect lm35 Positive pin to the A1 and Negative pin to the A2
+Connect Mosfet to pins D11 and D12
 */
 
 /* Includes */
@@ -43,6 +42,8 @@ Connect lm35 Positive pin to the A1 and Negative pin to the A2
 #include "stm32l1xx_ll_exti.h"
 #include "stm32l1xx_ll_dma.h"
 #include <stdbool.h>
+#include "states.h"
+#include <string.h>
 /* Private typedef */
 /* Private define  */
 /* Private macro */
@@ -56,6 +57,11 @@ char USART2_read(void);
 int read_adc_A0(void);
 bool mux_read(int *chan,uint32_t A,uint32_t B,uint32_t C, int *data);
 bool lm35_read(int *data);
+void mosfet_control(float voltage, float temp);
+void set_mosfet_state(bool flag);
+int check_range(int flag, float value);
+bool modbus_init();
+void USART2_send_string(const char *str);
 /**
 **===========================================================================
 **
@@ -93,7 +99,7 @@ int main(void)
 	LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT); // Set up pin 5 for output
 
 	char buf[100];
-
+	
 	/*Pin Setup for A B C Mux Controls*/
 
 	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB); // Enable clock for GPIOB (to configure its pins)
@@ -112,10 +118,15 @@ int main(void)
 	LL_GPIO_SetPinPull(GPIOB,LL_GPIO_PIN_5,LL_GPIO_PULL_DOWN);
 	LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_5, LL_GPIO_SPEED_FREQ_HIGH);
 
+	// Pin Enable Mosfet Control
+	LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_6,  LL_GPIO_MODE_OUTPUT); //Enable Pin PA6 (D12)
+	LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_7, LL_GPIO_MODE_OUTPUT);	//Enable Pin PA7 (D11)
+	LL_GPIO_SetPinSpeed(GPIOA, LL_GPIO_PIN_6, LL_GPIO_SPEED_FREQ_VERY_HIGH);	
+	LL_GPIO_SetPinSpeed(GPIOA, LL_GPIO_PIN_7, LL_GPIO_SPEED_FREQ_VERY_HIGH);	
+
 	/* Infinite loop */
 	int channel=0;
 	int temp_voltage = 0;
-	
 	while (1)
 	{
 		int adc_mux;
@@ -179,13 +190,12 @@ int main(void)
 			USART2_write(buf[i]);
 		}
 
+		mosfet_control(original_voltage/1000,temp_lm35/10+decimal_lm35);
+
 		/*Start new line*/
 		USART2_write('\n');
 		USART2_write('\r');
-
-
 		LL_mDelay(1000); // Wait 1 second
-  	
   	}
   return 0;
 }
@@ -396,4 +406,98 @@ bool lm35_read(int *data){
 	///if(*data > 1861) return false;
 
 	return true;
+}
+
+void set_mosfet_state(bool flag){
+//case 1 : mosfet is open
+if(flag){
+LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_6);
+LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_7);
+}
+//case 2 : mosfet is closed
+else{
+LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_6);	
+LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_7);	
+}
+}
+
+void mosfet_control(float voltage, float temp){
+	if(check_temp_state(check_range(0,temp)) && check_batt_state(check_range(1,voltage))){
+		set_mosfet_state(true);
+	}
+	else{
+		set_mosfet_state(false);
+	}
+	int temperature_result = check_range(0,temp);
+	int cell_voltage_result = check_range(1,voltage);
+
+}
+
+int check_range(int flag, float value){
+// 0 for temperature and 1 for cell voltage
+
+switch(flag){
+	case 0:
+		if(value < -20.0){
+			return TEMPERATURE_LOW;
+		}	
+		else if (value > 60.0){
+			return TEMPERATURE_HIGH;
+		}
+		else{
+			return TEMPERATURE_NORMAL;
+		}
+	break;
+	case 1:
+	if(value < 2.5){
+		return BATTERY_CELL_LOW;
+	}
+	else if(value > 4.2){
+		return BATTERY_CELL_HIGH;
+	}
+	else{
+		return BATTERY_CELL_NORMAL;
+	}
+
+}
+
+}
+
+
+bool modbus_init() { // not working
+    char receivedFrame[8]; // Assuming your Modbus frame is 8 characters long
+
+    while (1) {
+
+        // Wait for the start of a Modbus frame (assuming it starts with 01)
+		 receivedFrame[0] = USART2_read();
+		 receivedFrame[1] = USART2_read();
+        if (receivedFrame[0] == '0' && receivedFrame[1] == '1') {
+            // Read the rest of the Modbus frame
+            for (int i = 2; i < 8; ++i) {
+                receivedFrame[i] = USART2_read();
+				USART2_write(receivedFrame[i]); // debug
+            }
+
+            // Check if the received frame matches your Modbus frame
+            if (strncmp(receivedFrame, "03022E30", 8) == 0) {
+                // Reply with "Modbus is ready"
+				char buf[100];
+				sprintf(buf,"01030400000000");
+				int len=0;
+				while(buf[len]!='\0')
+				{
+					len++;
+				}
+
+				/*Transmit each element*/
+				for(int i=0;i<len;i++)
+				{
+					USART2_write(buf[i]);
+				}
+
+				return true;
+            }
+        }
+    }
 }
