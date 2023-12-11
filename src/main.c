@@ -83,11 +83,11 @@ int main(void) {
     while (1) {
         IWDG_feed();
 
-        if (subroutine_flag & ADC_READ_CURRENT) {
-            read_current_routine();
-        }
         if (subroutine_flag & ADC_READ_TEMPERATURE) {
             read_temperature_routine();
+        }
+        if (subroutine_flag & ADC_READ_CURRENT) {
+            read_current_routine();
         }
         if (subroutine_flag & ADC_READ_VOLTS) {
             read_cell_voltage_routine();
@@ -180,14 +180,14 @@ void read_temperature_routine(void) {
     moc_temp_adc += 100;
     moc_temp_adc = moc_temp_adc > 4095 ? 0 : moc_temp_adc;
 #endif
-    int16_t  temp_int = 0;
-    uint16_t temp_pos = 0;
-    uint16_t temp_neg = 0;
+    int32_t  temp_int = 0;
+    int32_t temp_pos = 0;
+    int32_t temp_neg = 0;
 #if (MOC_ADC_EN > 0)
     temp_int = adc_convert_batt_temp(moc_adc_read(0));
 #else
-    temp_pos = adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_P));
-    temp_neg = adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_N));
+    temp_pos = (int32_t)adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_P));
+    temp_neg = (int32_t)adc_convert_batt_temp(adc_read(ADC_INPUT_BATT_TEMP_N));
     temp_int = temp_pos - temp_neg;
 #endif
     modbus_registers[REG_ADDR_BATT_TEMP] =
